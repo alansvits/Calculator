@@ -12,6 +12,7 @@
 		648191C020C2845F00C85898 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 648191BE20C2845F00C85898 /* Main.storyboard */; };
 		648191C220C2846100C85898 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 648191C120C2846100C85898 /* Assets.xcassets */; };
 		648191C520C2846100C85898 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 648191C320C2846100C85898 /* LaunchScreen.storyboard */; };
+		64FC603020C3E5BC00DF59EA /* UIView+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64FC602F20C3E5BC00DF59EA /* UIView+extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		648191C120C2846100C85898 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		648191C420C2846100C85898 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		648191C620C2846100C85898 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		64FC602F20C3E5BC00DF59EA /* UIView+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 				648191C120C2846100C85898 /* Assets.xcassets */,
 				648191C320C2846100C85898 /* LaunchScreen.storyboard */,
 				648191C620C2846100C85898 /* Info.plist */,
+				64FC602F20C3E5BC00DF59EA /* UIView+extension.swift */,
 			);
 			path = Calculator;
 			sourceTree = "<group>";
@@ -135,6 +138,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				64FC603020C3E5BC00DF59EA /* UIView+extension.swift in Sources */,
 				648191BD20C2845F00C85898 /* ViewController.swift in Sources */,
 				648191BB20C2845F00C85898 /* AppDelegate.swift in Sources */,
 			);
@@ -289,7 +293,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.Calculator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -306,7 +310,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.Calculator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

@@ -36,17 +36,42 @@ class ViewController: UIViewController {
     @IBOutlet weak var decimalButton: DesignableButton!
     @IBOutlet weak var divisionBy100Button: DesignableButton!
     
+    let example = ["= 0", "- 0", "-0000000000000000", "-----------------------", "= 4", "x 2", "2", "-----------------------", "= 4","x 2", "2"]
+    let textTableCellIdentifier = "tableCell"
+    
+    
     //MARK: - Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
+
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+}
+
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
     }
-
-
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return example.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: textTableCellIdentifier, for: indexPath ) as! TableViewCell
+        
+        cell.myTextLabel?.text = example[indexPath.row]
+        if indexPath.row == 1 {
+            cell.myTextLabel.font = UIFont.systemFont(ofSize: 56)
+            cell.myTextLabel.textColor = UIColor.black
+        }
+        
+        cell.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
+        return cell
+    }
 }
 

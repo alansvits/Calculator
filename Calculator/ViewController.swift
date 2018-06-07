@@ -9,8 +9,8 @@
 import UIKit
 
 class ViewController: UIViewController {
-
-    //MARK: - Properties
+    
+    //MARK: - Properties IBOutlets
     @IBOutlet weak var tableView: UITableView!
     
     //MARK: Number buttons properties
@@ -36,9 +36,68 @@ class ViewController: UIViewController {
     @IBOutlet weak var decimalButton: DesignableButton!
     @IBOutlet weak var divisionBy100Button: DesignableButton!
     
+    //MARK: - Actions IBOutlets
+    
+    //Number buttons
+    @IBAction func zeroButtonPressed(_ sender: Any) {
+        
+        mainRow = mainRow + "0"
+        secondRow = "= " + mainRow
+        updateMainAndSecond(array: &rowsArray, main: mainRow, second: secondRow)
+        //        rowsArray.insert(secondRow, at: 0)
+        //        rowsArray.insert(mainRow, at: 1)
+        tableView.reloadData()
+    }
+    @IBAction func oneButtonPressed(_ sender: Any) {
+    }
+    @IBAction func twoButtonPressed(_ sender: Any) {
+    }
+    @IBAction func threeButtonPressed(_ sender: Any) {
+    }
+    @IBAction func fourButtonPressed(_ sender: Any) {
+    }
+    @IBAction func fiveButtonPressed(_ sender: Any) {
+    }
+    @IBAction func sixButtonPressed(_ sender: Any) {
+    }
+    @IBAction func sevenButtonPressed(_ sender: Any) {
+    }
+    @IBAction func eightButtonPressed(_ sender: Any) {
+    }
+    @IBAction func nineButtonPressed(_ sender: Any) {
+    }
+    
+    //MARK: Other buttons
+    @IBAction func clearButtonPressed(_ sender: Any) {
+    }
+    @IBAction func deleteButtonPressed(_ sender: Any) {
+    }
+    @IBAction func divisionButtonPressed(_ sender: Any) {
+    }
+    @IBAction func multiplicationButtonPressed(_ sender: Any) {
+    }
+    @IBAction func subtractionButtonPressed(_ sender: Any) {
+    }
+    @IBAction func additionButtonPressed(_ sender: Any) {
+    }
+    @IBAction func equalityButtonPressed(_ sender: Any) {
+    }
+    @IBAction func decimalButtonPressed(_ sender: Any) {
+    }
+    @IBAction func divisionBy100ButtonPressed(_ sender: Any) {
+    }
+    
+    //MARK: - Properties
     let example = ["= 0", "- 0", "-0000000000000000", "-----------------------", "= 4", "x 2", "2", "-----------------------", "= 4","x 2", "2"]
+    
     let textTableCellIdentifier = "tableCell"
     
+    var mainRow: String = ""
+    var secondRow: String = ""
+    var initialMainRowValue = "00"
+    
+    
+    var rowsArray: [String] = []
     
     //MARK: - Methods
     override func viewDidLoad() {
@@ -46,11 +105,25 @@ class ViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
-
+        
+        //Testing
+        //        rowsArray.append(initialMainRowValue)
     }
-
+    
 }
 
+extension ViewController {
+    //MARK: - Helper functions
+    func updateMainAndSecond(array: inout [String], main: String, second: String) -> [Array<Any>]{
+        if array.count > 1 {
+            array.removeSubrange(0..<2)
+        }
+        
+        array.insert(second, at: 0)
+        array.insert(main, at: 1)
+        return [array]
+    }
+}
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -58,17 +131,19 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return example.count
+        return rowsArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: textTableCellIdentifier, for: indexPath ) as! TableViewCell
         
-        cell.myTextLabel?.text = example[indexPath.row]
-        if indexPath.row == 1 {
-            cell.myTextLabel.font = UIFont.systemFont(ofSize: 56)
-            cell.myTextLabel.textColor = UIColor.black
-        }
+        
+        
+        cell.myTextLabel?.text = rowsArray[indexPath.row]
+        //        if rowsArray[indexPath.row].isMainInput {
+        //            cell.myTextLabel.font = UIFont.systemFont(ofSize: 56)
+        //            cell.myTextLabel.textColor = UIColor.black
+        //        }
         
         cell.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
         return cell

@@ -10,7 +10,7 @@ import UIKit
 
 class TableViewCell: UITableViewCell {
 
-    @IBOutlet weak var myTextLabel: UILabel!
+    @IBOutlet weak var myTextLabel: CustonUILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

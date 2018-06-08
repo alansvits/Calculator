@@ -25,7 +25,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var eightButton: DesignableButton!
     @IBOutlet weak var nineButton: DesignableButton!
     
-    //MARK: Action buttons properties
+    //MARK: - Action buttons properties
     @IBOutlet weak var allClearButton: DesignableButton!
     @IBOutlet weak var clearButton: DesignableButton!
     @IBOutlet weak var deleteButton: DesignableButton!
@@ -41,36 +41,35 @@ class ViewController: UIViewController {
     
     //Number buttons
     @IBAction func zeroButtonPressed(_ sender: Any) {
-        
-        mainRow = mainRow + "0"
-        secondRow = "= " + mainRow
-        updateMainAndSecond(array: &rowsArray, main: mainRow, second: secondRow)
-        tableView.reloadData()
-        print("rowsArray is \(rowsArray) \n mainRow is \(mainRow) \n secondRow is \(secondRow)")
+        buttonWith(0)
     }
     
     @IBAction func oneButtonPressed(_ sender: Any) {
-        mainRow = mainRow + "1"
-        secondRow = "= " + mainRow
-        updateMainAndSecond(array: &rowsArray, main: mainRow, second: secondRow)
-        tableView.reloadData()
-        print("rowsArray is \(rowsArray) \n mainRow is \(mainRow) \n secondRow is \(secondRow)")
+        buttonWith(1)
     }
     @IBAction func twoButtonPressed(_ sender: Any) {
+        buttonWith(2)
     }
     @IBAction func threeButtonPressed(_ sender: Any) {
+        buttonWith(3)
     }
     @IBAction func fourButtonPressed(_ sender: Any) {
+        buttonWith(4)
     }
     @IBAction func fiveButtonPressed(_ sender: Any) {
+        buttonWith(5)
     }
     @IBAction func sixButtonPressed(_ sender: Any) {
+        buttonWith(6)
     }
     @IBAction func sevenButtonPressed(_ sender: Any) {
+        buttonWith(7)
     }
     @IBAction func eightButtonPressed(_ sender: Any) {
+        buttonWith(8)
     }
     @IBAction func nineButtonPressed(_ sender: Any) {
+        buttonWith(9)
     }
     
     //MARK: Other buttons
@@ -91,10 +90,12 @@ class ViewController: UIViewController {
     }
     
     @IBAction func deleteButtonPressed(_ sender: Any) {
-        mainRow.removeLast()
-        secondRow.removeLast()
-        clearSecondRow()
-        updateMainAndSecond(array: &rowsArray, main: mainRow, second: secondRow)
+        if !rowsArray.isEmpty {
+            mainRow.removeLast()
+            secondRow.removeLast()
+            clearSecondRow()
+            updateMainAndSecond(array: &rowsArray, main: mainRow, second: secondRow)
+        }
         tableView.reloadData()
         print("rowsArray is \(rowsArray) \n mainRow is \(mainRow) \n secondRow is \(secondRow)")
     }
@@ -106,10 +107,22 @@ class ViewController: UIViewController {
     @IBAction func subtractionButtonPressed(_ sender: Any) {
     }
     @IBAction func additionButtonPressed(_ sender: Any) {
+        buttonWith("+")
     }
     @IBAction func equalityButtonPressed(_ sender: Any) {
     }
     @IBAction func decimalButtonPressed(_ sender: Any) {
+        if !mainRow.contains(".") {
+            if mainRow.isEmpty {
+                mainRow.append(" 0")
+            }
+            mainRow = mainRow + "."
+            secondRow = "= " + mainRow
+            updateMainAndSecond(array: &rowsArray, main: mainRow, second: secondRow)
+        }
+        print("rowsArray is \(rowsArray) \n mainRow is \(mainRow) \n secondRow is \(secondRow)")
+        tableView.reloadData()
+        
     }
     @IBAction func divisionBy100ButtonPressed(_ sender: Any) {
     }
@@ -121,8 +134,6 @@ class ViewController: UIViewController {
     
     var mainRow: String = ""
     var secondRow: String = ""
-    var initialMainRowValue = "00"
-    
     
     var rowsArray: [String] = []
     
@@ -132,16 +143,13 @@ class ViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
-        
-        //Testing
-        //        rowsArray.append(initialMainRowValue)
     }
     
 }
 
+//MARK: - Helper functions
 extension ViewController {
-    //MARK: - Helper functions
-    func updateMainAndSecond(array: inout [String], main: String, second: String) -> [Array<String>]{
+    func updateMainAndSecond(array: inout [String], main: String, second: String) {
         if array.count > 1 {
             array.removeSubrange(0..<2)
         }
@@ -151,7 +159,6 @@ extension ViewController {
         if main.isEmpty {
             array.removeAll()
         }
-        return [array]
     }
     
     func clearSecondRow() {
@@ -159,7 +166,31 @@ extension ViewController {
             secondRow.removeAll()
         }
     }
+    
+    func defaultRowValue(initial value: inout String) {
+        if rowsArray.isEmpty {
+            rowsArray.append(value)
+        }
+    }
+    
+    fileprivate func buttonWith(_ number: Int) {
+        mainRow = mainRow + String(number)
+        secondRow = "= " + mainRow
+        updateMainAndSecond(array: &rowsArray, main: mainRow, second: secondRow)
+        tableView.reloadData()
+        print("rowsArray is \(rowsArray) \n mainRow is \(mainRow) \n secondRow is \(secondRow)")
+    }
+    
+    fileprivate func buttonWith(_ symbol: String) {
+        
+        mainRow = mainRow + symbol
+        secondRow = "= " + mainRow
+        updateMainAndSecond(array: &rowsArray, main: mainRow, second: secondRow)
+        tableView.reloadData()
+        print("rowsArray is \(rowsArray) \n mainRow is \(mainRow) \n secondRow is \(secondRow)")
+    }
 }
+//MARK: - TableView delegate, datasource functions
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -174,7 +205,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             allClearButton.isHidden = false
             clearButton.isHidden = true
         }
-        
+        if mainRow.last == " " {
+            rowsArray.removeAll()
+        }
         return rowsArray.count
     }
     

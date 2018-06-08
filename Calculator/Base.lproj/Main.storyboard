@@ -48,7 +48,7 @@
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iNb-nR-842" customClass="CustonUILabel" customModule="Calculator" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="0.0" width="311" height="49.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                                    <fontDescription key="fontDescription" name=".SFNSDisplay" family=".SF NS Display" pointSize="30"/>
                                                     <color key="textColor" red="0.63137254899999995" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>

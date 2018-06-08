@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		640014DA20CA9EB500649F15 /* TableItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640014D920CA9EB500649F15 /* TableItem.swift */; };
 		64050E0920C7ED7F006FF9B0 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64050E0820C7ED7F006FF9B0 /* TableViewCell.swift */; };
 		648191BB20C2845F00C85898 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648191BA20C2845F00C85898 /* AppDelegate.swift */; };
 		648191BD20C2845F00C85898 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648191BC20C2845F00C85898 /* ViewController.swift */; };
@@ -20,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		5B9B933CC9D7CB375170D365 /* Pods-Calculator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Calculator.release.xcconfig"; path = "Pods/Target Support Files/Pods-Calculator/Pods-Calculator.release.xcconfig"; sourceTree = "<group>"; };
+		640014D920CA9EB500649F15 /* TableItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableItem.swift; sourceTree = "<group>"; };
 		64050E0820C7ED7F006FF9B0 /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		648191B720C2845F00C85898 /* Calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calculator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		648191BA20C2845F00C85898 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 				648191C320C2846100C85898 /* LaunchScreen.storyboard */,
 				648191C620C2846100C85898 /* Info.plist */,
 				64FC602F20C3E5BC00DF59EA /* UIView+extension.swift */,
+				640014D920CA9EB500649F15 /* TableItem.swift */,
 				64FCD6C520C957440005E949 /* CustonUILabel.swift */,
 			);
 			path = Calculator;
@@ -210,6 +213,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				64FC603020C3E5BC00DF59EA /* UIView+extension.swift in Sources */,
+				640014DA20CA9EB500649F15 /* TableItem.swift in Sources */,
 				64050E0920C7ED7F006FF9B0 /* TableViewCell.swift in Sources */,
 				648191BD20C2845F00C85898 /* ViewController.swift in Sources */,
 				64FCD6C620C957440005E949 /* CustonUILabel.swift in Sources */,

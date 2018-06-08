@@ -112,6 +112,9 @@
                                         <color key="value" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="allClearButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3jF-yO-OIu"/>
+                                </connections>
                             </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KrJ-Wl-Nym" customClass="DesignableButton" customModule="Calculator" customModuleProvider="target">
                                 <rect key="frame" x="-1" y="306" width="94" height="73"/>
@@ -507,6 +510,7 @@
                     </view>
                     <connections>
                         <outlet property="additionButton" destination="ZrZ-Tx-JM8" id="3Tf-fB-LPV"/>
+                        <outlet property="allClearButton" destination="s8i-7u-76F" id="lDF-Cm-AoY"/>
                         <outlet property="clearButton" destination="KrJ-Wl-Nym" id="LfA-pa-axp"/>
                         <outlet property="decimalButton" destination="zoX-Ms-lQA" id="PeB-ZG-xfS"/>
                         <outlet property="deleteButton" destination="WVX-fJ-Gt8" id="KzD-fl-oee"/>

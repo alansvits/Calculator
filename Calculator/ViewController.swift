@@ -26,6 +26,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var nineButton: DesignableButton!
     
     //MARK: Action buttons properties
+    @IBOutlet weak var allClearButton: DesignableButton!
     @IBOutlet weak var clearButton: DesignableButton!
     @IBOutlet weak var deleteButton: DesignableButton!
     @IBOutlet weak var divisionButton: DesignableButton!
@@ -44,11 +45,16 @@ class ViewController: UIViewController {
         mainRow = mainRow + "0"
         secondRow = "= " + mainRow
         updateMainAndSecond(array: &rowsArray, main: mainRow, second: secondRow)
-        //        rowsArray.insert(secondRow, at: 0)
-        //        rowsArray.insert(mainRow, at: 1)
         tableView.reloadData()
+        print("rowsArray is \(rowsArray) \n mainRow is \(mainRow) \n secondRow is \(secondRow)")
     }
+    
     @IBAction func oneButtonPressed(_ sender: Any) {
+        mainRow = mainRow + "1"
+        secondRow = "= " + mainRow
+        updateMainAndSecond(array: &rowsArray, main: mainRow, second: secondRow)
+        tableView.reloadData()
+        print("rowsArray is \(rowsArray) \n mainRow is \(mainRow) \n secondRow is \(secondRow)")
     }
     @IBAction func twoButtonPressed(_ sender: Any) {
     }
@@ -68,10 +74,31 @@ class ViewController: UIViewController {
     }
     
     //MARK: Other buttons
+    @IBAction func allClearButton(_ sender: Any) {
+        rowsArray.removeAll()
+        mainRow.removeAll()
+        secondRow.removeAll()
+        tableView.reloadData()
+        print("rowsArray is \(rowsArray) \n mainRow is \(mainRow) \n secondRow is \(secondRow)")
+    }
+    
     @IBAction func clearButtonPressed(_ sender: Any) {
+        rowsArray.removeAll()
+        mainRow.removeAll()
+        secondRow.removeAll()
+        tableView.reloadData()
+        print("rowsArray is \(rowsArray) \n mainRow is \(mainRow) \n secondRow is \(secondRow)")
     }
+    
     @IBAction func deleteButtonPressed(_ sender: Any) {
+        mainRow.removeLast()
+        secondRow.removeLast()
+        clearSecondRow()
+        updateMainAndSecond(array: &rowsArray, main: mainRow, second: secondRow)
+        tableView.reloadData()
+        print("rowsArray is \(rowsArray) \n mainRow is \(mainRow) \n secondRow is \(secondRow)")
     }
+    
     @IBAction func divisionButtonPressed(_ sender: Any) {
     }
     @IBAction func multiplicationButtonPressed(_ sender: Any) {
@@ -114,14 +141,23 @@ class ViewController: UIViewController {
 
 extension ViewController {
     //MARK: - Helper functions
-    func updateMainAndSecond(array: inout [String], main: String, second: String) -> [Array<Any>]{
+    func updateMainAndSecond(array: inout [String], main: String, second: String) -> [Array<String>]{
         if array.count > 1 {
             array.removeSubrange(0..<2)
         }
-        
         array.insert(second, at: 0)
         array.insert(main, at: 1)
+        
+        if main.isEmpty {
+            array.removeAll()
+        }
         return [array]
+    }
+    
+    func clearSecondRow() {
+        if mainRow.isEmpty {
+            secondRow.removeAll()
+        }
     }
 }
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
@@ -131,6 +167,14 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if rowsArray.count > 1 {
+            allClearButton.isHidden = true
+            clearButton.isHidden = false
+        } else {
+            allClearButton.isHidden = false
+            clearButton.isHidden = true
+        }
+        
         return rowsArray.count
     }
     

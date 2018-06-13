@@ -41,63 +41,54 @@ class ViewController: UIViewController {
     
     //Number buttons
     @IBAction func zeroButtonPressed(_ sender: Any) {
-        buttonWith(0)
+        
     }
     
     @IBAction func oneButtonPressed(_ sender: Any) {
-        buttonWith(1)
+        updateRowText(&mainRow, with: String(NumberKeyboard.one.rawValue))
+        updateRowText(&secondaryRow, with: mainRow.text)
+        updateRowsArray(main: mainRow, secondRow: secondaryRow)
+        tableView.reloadData()
+        print("mainRow.text is \(mainRow.text)\n secondRow is \(secondaryRow.text)\n rowsArr is \(rowsArray)")
     }
     @IBAction func twoButtonPressed(_ sender: Any) {
-        buttonWith(2)
+        updateRowText(&mainRow, with: String(NumberKeyboard.two.rawValue))
+        updateRowText(&secondaryRow, with: mainRow.text)
+        updateRowsArray(main: mainRow, secondRow: secondaryRow)
+        tableView.reloadData()
+        print("mainRow.text is \(mainRow.text)\n secondRow is \(secondaryRow.text)\n rowsArr is \(rowsArray)")
     }
     @IBAction func threeButtonPressed(_ sender: Any) {
-        buttonWith(3)
     }
     @IBAction func fourButtonPressed(_ sender: Any) {
-        buttonWith(4)
     }
     @IBAction func fiveButtonPressed(_ sender: Any) {
-        buttonWith(5)
     }
     @IBAction func sixButtonPressed(_ sender: Any) {
-        buttonWith(6)
     }
     @IBAction func sevenButtonPressed(_ sender: Any) {
-        buttonWith(7)
     }
     @IBAction func eightButtonPressed(_ sender: Any) {
-        buttonWith(8)
     }
     @IBAction func nineButtonPressed(_ sender: Any) {
-        buttonWith(9)
+        
     }
     
     //MARK: Other buttons
     @IBAction func allClearButton(_ sender: Any) {
-        rowsArray.removeAll()
-        mainRow.removeAll()
-        secondRow.removeAll()
-        tableView.reloadData()
-        print("rowsArray is \(rowsArray) \n mainRow is \(mainRow) \n secondRow is \(secondRow)")
     }
     
     @IBAction func clearButtonPressed(_ sender: Any) {
-        rowsArray.removeAll()
-        mainRow.removeAll()
-        secondRow.removeAll()
-        tableView.reloadData()
-        print("rowsArray is \(rowsArray) \n mainRow is \(mainRow) \n secondRow is \(secondRow)")
     }
     
     @IBAction func deleteButtonPressed(_ sender: Any) {
-        if !rowsArray.isEmpty {
-            mainRow.removeLast()
-            secondRow.removeLast()
-            clearSecondRow()
-            updateMainAndSecond(array: &rowsArray, main: mainRow, second: secondRow)
-        }
+        mainRow.deleleLastTextCharacter()
+        defaultZero(when: mainRow.text)
+        updateRowText(&secondaryRow, with: mainRow.text)
+        updateRowsArray(main: mainRow, secondRow: secondaryRow)
         tableView.reloadData()
-        print("rowsArray is \(rowsArray) \n mainRow is \(mainRow) \n secondRow is \(secondRow)")
+        print("deletePressed \n")
+        print("mainRow.text is \(mainRow.text)\n secondRow is \(secondaryRow.text)\n rowsArr is \(rowsArray)")
     }
     
     @IBAction func divisionButtonPressed(_ sender: Any) {
@@ -107,22 +98,10 @@ class ViewController: UIViewController {
     @IBAction func subtractionButtonPressed(_ sender: Any) {
     }
     @IBAction func additionButtonPressed(_ sender: Any) {
-        buttonWith("+")
     }
     @IBAction func equalityButtonPressed(_ sender: Any) {
     }
     @IBAction func decimalButtonPressed(_ sender: Any) {
-        if !mainRow.contains(".") {
-            if mainRow.isEmpty {
-                mainRow.append(" 0")
-            }
-            mainRow = mainRow + "."
-            secondRow = "= " + mainRow
-            updateMainAndSecond(array: &rowsArray, main: mainRow, second: secondRow)
-        }
-        print("rowsArray is \(rowsArray) \n mainRow is \(mainRow) \n secondRow is \(secondRow)")
-        tableView.reloadData()
-        
     }
     @IBAction func divisionBy100ButtonPressed(_ sender: Any) {
     }
@@ -132,10 +111,9 @@ class ViewController: UIViewController {
     
     let textTableCellIdentifier = "tableCell"
     
-    var mainRow: String = ""
-    var secondRow: String = ""
-    
-    var rowsArray: [String] = []
+    var rowsArray = [TableItem]()
+    var mainRow = TableItem(with: "0", isMain: true)
+    var secondaryRow = TableItem(with: "= ")
     
     //MARK: - Methods
     override func viewDidLoad() {
@@ -143,52 +121,51 @@ class ViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
+        
+        insertRowTo(array: &rowsArray, row: &mainRow, at: 0)
     }
     
 }
 
 //MARK: - Helper functions
 extension ViewController {
-    func updateMainAndSecond(array: inout [String], main: String, second: String) {
-        if array.count > 1 {
-            array.removeSubrange(0..<2)
-        }
-        array.insert(second, at: 0)
-        array.insert(main, at: 1)
-        
-        if main.isEmpty {
-            array.removeAll()
-        }
+    
+    func insertRowTo(array: inout [TableItem], row: inout TableItem, at index: Int) {
+        array.insert(row, at: index)
     }
     
-    func clearSecondRow() {
-        if mainRow.isEmpty {
-            secondRow.removeAll()
+    func updateRowText(_ row: inout TableItem, with text: String) {
+        if row.text.contains("=") {
+            row.text = "= " + text
+        } else {
+            row.text = row.text + text
         }
     }
     
-    func defaultRowValue(initial value: inout String) {
-        if rowsArray.isEmpty {
-            rowsArray.append(value)
+    func updateRowsArray() {
+        if rowsArray.count == 1 {
+            rowsArray.insert(secondaryRow, at: 0)
         }
     }
     
-    fileprivate func buttonWith(_ number: Int) {
-        mainRow = mainRow + String(number)
-        secondRow = "= " + mainRow
-        updateMainAndSecond(array: &rowsArray, main: mainRow, second: secondRow)
-        tableView.reloadData()
-        print("rowsArray is \(rowsArray) \n mainRow is \(mainRow) \n secondRow is \(secondRow)")
+    func updateRowsArray(main: TableItem, secondRow: TableItem) {
+        if rowsArray.count == 1 {
+            rowsArray.insert(secondRow, at: 0)
+            rowsArray.remove(at: 1)
+            rowsArray.append(main)
+        } else {
+            let arr: [TableItem] = [secondRow, main]
+            rowsArray.replaceSubrange(0...1, with: arr)
+        }
     }
     
-    fileprivate func buttonWith(_ symbol: String) {
-        
-        mainRow = mainRow + symbol
-        secondRow = "= " + mainRow
-        updateMainAndSecond(array: &rowsArray, main: mainRow, second: secondRow)
-        tableView.reloadData()
-        print("rowsArray is \(rowsArray) \n mainRow is \(mainRow) \n secondRow is \(secondRow)")
+    func defaultZero(when text: String) {
+        if text == "" {
+            mainRow.text = "0"
+            secondaryRow.text = "= " + mainRow.text
+        }
     }
+    
 }
 //MARK: - TableView delegate, datasource functions
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
@@ -198,32 +175,29 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if rowsArray.count > 1 {
-            allClearButton.isHidden = true
-            clearButton.isHidden = false
-        } else {
-            allClearButton.isHidden = false
-            clearButton.isHidden = true
-        }
-        if mainRow.last == " " {
-            rowsArray.removeAll()
-        }
         return rowsArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: textTableCellIdentifier, for: indexPath ) as! TableViewCell
-        
-        
-        
-        cell.myTextLabel?.text = rowsArray[indexPath.row]
-        //        if rowsArray[indexPath.row].isMainInput {
-        //            cell.myTextLabel.font = UIFont.systemFont(ofSize: 56)
-        //            cell.myTextLabel.textColor = UIColor.black
-        //        }
+        if rowsArray[indexPath.row].isMain {
+            cell.myTextLabel.font = UIFont.systemFont(ofSize: 56)
+            cell.myTextLabel.textColor = UIColor.black
+        }
+        if !rowsArray[indexPath.row].isMain {
+            cell.myTextLabel.font = UIFont.systemFont(ofSize: 30)
+            cell.myTextLabel.textColor = UIColor.gray
+        }
+        cell.myTextLabel.text = rowsArray[indexPath.row].text
         
         cell.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
         return cell
     }
 }
 
+extension ViewController {
+    //MARK: - Numbers of keyboard
+    enum NumberKeyboard: Int {
+        case zero = 0, one, two, three, four, five, six, seven, eight, nine
+    }
+}

@@ -15,4 +15,11 @@ struct TableItem {
         self.text = text
         self.isMain = isMain
     }
+    
+    mutating func deleleLastTextCharacter() {
+        if !self.text.isEmpty {
+            self.text.removeLast()
+        }
+        
+    }
 }

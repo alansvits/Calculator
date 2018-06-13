@@ -20,6 +20,20 @@ struct TableItem {
         if !self.text.isEmpty {
             self.text.removeLast()
         }
-        
+    }
+    
+    mutating func addToText(_ text: String) {
+        removeZero()
+        self.text = self.text + text
+    }
+    
+    mutating func setText(_ text: String) {
+            self.text = text
+    }
+    
+    private mutating func removeZero() {
+        if self.text.count == 1 && self.text == "0" {
+            self.text = ""
+        }
     }
 }

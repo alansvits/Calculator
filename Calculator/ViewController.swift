@@ -98,10 +98,17 @@ class ViewController: UIViewController {
     @IBAction func subtractionButtonPressed(_ sender: Any) {
     }
     @IBAction func additionButtonPressed(_ sender: Any) {
+        rowsArray.append(TableItem(with: "test"))
+        tableView.reloadData()
     }
     @IBAction func equalityButtonPressed(_ sender: Any) {
     }
     @IBAction func decimalButtonPressed(_ sender: Any) {
+        updateRowText(&mainRow, with: decimalSign)
+        updateRowText(&secondaryRow, with: mainRow.text)
+        updateRowsArray(main: mainRow, secondRow: secondaryRow)
+        tableView.reloadData()
+        print("mainRow.text is \(mainRow.text)\n secondRow is \(secondaryRow.text)\n rowsArr is \(rowsArray)")
     }
     @IBAction func divisionBy100ButtonPressed(_ sender: Any) {
     }
@@ -114,6 +121,9 @@ class ViewController: UIViewController {
     var rowsArray = [TableItem]()
     var mainRow = TableItem(with: "0", isMain: true)
     var secondaryRow = TableItem(with: "= ")
+    
+        //MARK: DecimalSign
+    let decimalSign = "."
     
     //MARK: - Methods
     override func viewDidLoad() {
@@ -136,9 +146,9 @@ extension ViewController {
     
     func updateRowText(_ row: inout TableItem, with text: String) {
         if row.text.contains("=") {
-            row.text = "= " + text
+            row.setText("= " + text)
         } else {
-            row.text = row.text + text
+            row.addToText(text)
         }
     }
     
@@ -165,6 +175,7 @@ extension ViewController {
             secondaryRow.text = "= " + mainRow.text
         }
     }
+
     
 }
 //MARK: - TableView delegate, datasource functions
@@ -200,4 +211,5 @@ extension ViewController {
     enum NumberKeyboard: Int {
         case zero = 0, one, two, three, four, five, six, seven, eight, nine
     }
+    
 }

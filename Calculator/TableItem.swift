@@ -23,7 +23,7 @@ struct TableItem {
     }
     
     mutating func addToText(_ text: String) {
-        removeZero()
+//        removeZero()
         self.text = self.text + text
     }
     
@@ -31,7 +31,7 @@ struct TableItem {
             self.text = text
     }
     
-    private mutating func removeZero() {
+    mutating func removeZero() {
         if self.text.count == 1 && self.text == "0" {
             self.text = ""
         }

@@ -45,6 +45,8 @@ class ViewController: UIViewController {
     }
     
     @IBAction func oneButtonPressed(_ sender: Any) {
+        mainRow.removeZero()
+        secondaryRow.removeZero()
         updateRowText(&mainRow, with: String(NumberKeyboard.one.rawValue))
         updateRowText(&secondaryRow, with: mainRow.text)
         updateRowsArray(main: mainRow, secondRow: secondaryRow)
@@ -52,6 +54,8 @@ class ViewController: UIViewController {
         print("mainRow.text is \(mainRow.text)\n secondRow is \(secondaryRow.text)\n rowsArr is \(rowsArray)")
     }
     @IBAction func twoButtonPressed(_ sender: Any) {
+        mainRow.removeZero()
+        secondaryRow.removeZero()
         updateRowText(&mainRow, with: String(NumberKeyboard.two.rawValue))
         updateRowText(&secondaryRow, with: mainRow.text)
         updateRowsArray(main: mainRow, secondRow: secondaryRow)
@@ -98,21 +102,43 @@ class ViewController: UIViewController {
     @IBAction func subtractionButtonPressed(_ sender: Any) {
     }
     @IBAction func additionButtonPressed(_ sender: Any) {
-        rowsArray.append(TableItem(with: "test"))
-        tableView.reloadData()
+        if !mainRow.text.contains("+") {
+            let numberToExpression = Int(mainRow.text)
+            expression.addOperand(Double(numberToExpression!))
+            expression.addOperator(.add).build()
+            let tempItem = TableItem(with: mainRow.text, isMain: false)
+            insertRowTo(array: &rowsArray, row: tempItem, at: 2)
+            mainRow.setText("+")
+            updateRowsArray(main: mainRow, secondRow: secondaryRow)
+            tableView.reloadData()
+            print(expression.build().description)
+        } else if mainRow.text.contains("+") && mainRow.text.count != 1 {
+            let tempItem = TableItem(with: mainRow.text, isMain: false)
+            mainRow.text.removeFirst()
+            let numberToExpression = Int(mainRow.text)
+            expression.addOperand(Double(numberToExpression!))
+            expression.addOperator(.add).build()
+            insertRowTo(array: &rowsArray, row: tempItem, at: 2)
+            mainRow.setText("+")
+            updateRowsArray(main: mainRow, secondRow: secondaryRow)
+            tableView.reloadData()
+            print(expression.build().description)
+        }
     }
     @IBAction func equalityButtonPressed(_ sender: Any) {
     }
     @IBAction func decimalButtonPressed(_ sender: Any) {
-        updateRowText(&mainRow, with: decimalSign)
-        updateRowText(&secondaryRow, with: mainRow.text)
-        updateRowsArray(main: mainRow, secondRow: secondaryRow)
-        tableView.reloadData()
-        print("mainRow.text is \(mainRow.text)\n secondRow is \(secondaryRow.text)\n rowsArr is \(rowsArray)")
+        if !mainRow.text.contains(".") {
+            updateRowText(&mainRow, with: decimalSign)
+            updateRowText(&secondaryRow, with: mainRow.text)
+            updateRowsArray(main: mainRow, secondRow: secondaryRow)
+            tableView.reloadData()
+            print("mainRow.text is \(mainRow.text)\n secondRow is \(secondaryRow.text)\n rowsArr is \(rowsArray)")
+        }
+        
     }
     @IBAction func divisionBy100ButtonPressed(_ sender: Any) {
     }
-    
     //MARK: - Properties
     let example = ["= 0", "- 0", "-0000000000000000", "-----------------------", "= 4", "x 2", "2", "-----------------------", "= 4","x 2", "2"]
     
@@ -122,7 +148,10 @@ class ViewController: UIViewController {
     var mainRow = TableItem(with: "0", isMain: true)
     var secondaryRow = TableItem(with: "= ")
     
-        //MARK: DecimalSign
+    //MARK: Infix expression
+    var expression = InfixExpressionBuilder()
+    
+    //MARK: DecimalSign
     let decimalSign = "."
     
     //MARK: - Methods
@@ -132,7 +161,10 @@ class ViewController: UIViewController {
         tableView.dataSource = self
         tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
         
-        insertRowTo(array: &rowsArray, row: &mainRow, at: 0)
+        insertRowTo(array: &rowsArray, row: mainRow, at: 0)
+        
+        let test = "9 3 - 1 /"
+        solveRPN(exp: test)
     }
     
 }
@@ -140,7 +172,7 @@ class ViewController: UIViewController {
 //MARK: - Helper functions
 extension ViewController {
     
-    func insertRowTo(array: inout [TableItem], row: inout TableItem, at index: Int) {
+    func insertRowTo(array: inout [TableItem], row: TableItem, at index: Int) {
         array.insert(row, at: index)
     }
     
@@ -175,7 +207,48 @@ extension ViewController {
             secondaryRow.text = "= " + mainRow.text
         }
     }
-
+    
+    func solveRPN(exp: String) -> Double{
+        var numberStack = Stack<Int>()
+        
+        for item in exp {
+            
+            if let num = Int(String(item)) {
+                numberStack.push(num)
+            } else {
+                switch item {
+                case "+":
+                    let right = numberStack.pop()
+                    let left = numberStack.pop()
+                    let temp = left! + right!
+                    numberStack.push(temp)
+                case "-":
+                    let right = numberStack.pop()
+                    let left = numberStack.pop()
+                    let temp = left! - right!
+                    numberStack.push(temp)
+                case "*":
+                    let right = numberStack.pop()
+                    let left = numberStack.pop()
+                    let temp = left! * right!
+                    numberStack.push(temp)
+                case "/":
+                    let right = numberStack.pop()
+                    let left = numberStack.pop()
+                    let temp = left! / right!
+                    numberStack.push(temp)
+                case " ":
+                    print("space")
+                default:
+                    print("error")
+                }
+            }
+        }
+        
+        print(numberStack.top)
+        return Double(numberStack.top!)
+        
+    }
     
 }
 //MARK: - TableView delegate, datasource functions

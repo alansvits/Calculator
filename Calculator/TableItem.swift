@@ -11,6 +11,18 @@ import Foundation
 struct TableItem {
     var text: String
     var isMain: Bool
+    var numberPart: Double? {
+        if text == " " || text == "0" {
+            return 0
+        } else if text.contains("+") {
+            var temp = text
+            temp.removeFirst()
+            return Double(temp)!
+        } else {
+            return nil
+        }
+    }
+    
     init(with text: String, isMain: Bool = false) {
         self.text = text
         self.isMain = isMain

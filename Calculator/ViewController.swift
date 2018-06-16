@@ -163,8 +163,10 @@ class ViewController: UIViewController {
         
         insertRowTo(array: &rowsArray, row: mainRow, at: 0)
         
-        let test = "9 3 - 1 /"
-        solveRPN(exp: test)
+        let test = "0"
+        let testArr = test.split(separator: " ")
+        print(testArr)
+        print(solveRPN(exp: testArr))
     }
     
 }
@@ -208,9 +210,13 @@ extension ViewController {
         }
     }
     
-    func solveRPN(exp: String) -> Double{
+    func solveRPN(exp: [Substring]) -> Double? {
         var numberStack = Stack<Int>()
         
+        if exp.count == 1 {
+            let temp = Int(String(exp.first!))
+            return Double(temp!)
+        }
         for item in exp {
             
             if let num = Int(String(item)) {
@@ -234,13 +240,14 @@ extension ViewController {
                     numberStack.push(temp)
                 case "/":
                     let right = numberStack.pop()
+                    if right == 0 {
+                        return nil
+                    }
                     let left = numberStack.pop()
                     let temp = left! / right!
                     numberStack.push(temp)
-                case " ":
-                    print("space")
                 default:
-                    print("error")
+                    return nil
                 }
             }
         }

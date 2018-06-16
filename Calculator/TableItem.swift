@@ -16,6 +16,23 @@ struct TableItem {
         self.isMain = isMain
     }
     
+    var numberPart: Double {
+        if text.isEmpty {
+            return Double(0)
+        } else if (text.first == "+" || text.first == "-" || text.first == "/" || text.first == "*") && text.count == 1 {
+            return Double(0)
+        } else if !(text.first == "+" || text.first == "-" || text.first == "/" || text.first == "*") && text.count == 1 {
+            let temp = text
+            return Double(temp)!
+        } else if !(text.first == "+" || text.first == "-" || text.first == "/" || text.first == "*") && text.count != 1 {
+            let temp = text
+            return Double(temp)!
+        } else {
+            print(text)
+            let temp = String(text.dropFirst())
+            return Double(temp)!
+        }
+    }
     mutating func deleleLastTextCharacter() {
         if !self.text.isEmpty {
             self.text.removeLast()

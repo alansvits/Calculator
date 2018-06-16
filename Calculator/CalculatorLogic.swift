@@ -172,7 +172,7 @@ public class InfixExpressionBuilder {
         expression.append(Token(tokenType: .closeBracket))
         return self
     }
-    
+
     public func build() -> [Token] {
         // Maybe do some validation here
         return expression

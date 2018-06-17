@@ -47,9 +47,19 @@ class ViewController: UIViewController {
     @IBAction func oneButtonPressed(_ sender: Any) {
         mainRow.removeZero()
         secondaryRow.removeZero()
+        var lastSign = mainRow.text.last
+        if lastSign == "+" {
+            expression.addOperand(mainRow.numberPart)
+        }
         updateRowText(&mainRow, with: String(NumberKeyboard.one.rawValue))
         //        expression.addOperand(mainRow.numberPart)
-        expression.addOperand(mainRow.numberPart)
+        var temp = mainRow.text.last
+        if let item = Double(String(temp!)) {
+            expression.removeLastToken()
+            expression.addOperand(mainRow.numberPart)
+        } else {
+            expression.addOperand(mainRow.numberPart)
+        }
         updateRowText(&secondaryRow, with: mainRow.text)
         updateRowsArray(main: mainRow, secondRow: secondaryRow)
         tableView.reloadData()
@@ -163,7 +173,7 @@ class ViewController: UIViewController {
     
     //MARK: DecimalSign
     let decimalSign = "."
-    
+
     //MARK: - Methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -172,8 +182,9 @@ class ViewController: UIViewController {
         tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
         
         insertRowTo(array: &rowsArray, row: mainRow, at: 0)
-        
-        let test = "0"
+        expression.addOperand(mainRow.numberPart)
+        printToConsole(this: expression.build().description, of: "from viewdidload: exp -")
+        printToConsole(this: rowsArray.count, of: "rowsArray is")
     }
     
 }

@@ -45,39 +45,33 @@ class ViewController: UIViewController {
     }
     
     @IBAction func oneButtonPressed(_ sender: Any) {
-        mainRow.removeZero()
-        secondaryRow.removeZero()
-        var lastSign = mainRow.text.last
-        if lastSign == "+" {
-            expression.addOperand(mainRow.numberPart)
+        if numberButtonsClickCouter == 0 {
+            if expression.build().isEmpty {
+                mainRow.removeZero()
+            }
+            //update mainRox.text
+            updateRowText(&mainRow, with: "1")
+
+            //add to tokens array mainRow.numberPart
+            expression.addOperand(1)
+            printToConsole(this: expression.build().description, of: "exp is")
+            let tempValue = reversePolishNotation(expression.build())
+            printToConsole(this: tempValue, of: "tempValue is")
+            let tempDouble = solveRPN(exp: tempValue)
+
+            //update secondaryRow with result of solveRPN
+            updateRowText(&secondaryRow, with: String(tempDouble!))
+            //update rowsArray
+
+            updateRowsArray(main: mainRow, secondRow: secondaryRow)
+            //update counter of number keys clicks
+            numberButtonsClickCouter += 1
+
+            tableView.reloadData()
+            
         }
-        updateRowText(&mainRow, with: String(NumberKeyboard.one.rawValue))
-        //        expression.addOperand(mainRow.numberPart)
-        var temp = mainRow.text.last
-        if let item = Double(String(temp!)) {
-            expression.removeLastToken()
-            expression.addOperand(mainRow.numberPart)
-        } else {
-            expression.addOperand(mainRow.numberPart)
-        }
-        updateRowText(&secondaryRow, with: mainRow.text)
-        updateRowsArray(main: mainRow, secondRow: secondaryRow)
-        tableView.reloadData()
-        
-        printToConsole(this: mainRow.numberPart, of: "numberPart")
-        print("mainRow.text is \(mainRow.text)\n secondRow is \(secondaryRow.text)\n rowsArr is \(rowsArray)")
-        printToConsole(this: expression.build().description, of: "oneB: exp")
-        
     }
     @IBAction func twoButtonPressed(_ sender: Any) {
-        mainRow.removeZero()
-        secondaryRow.removeZero()
-        updateRowText(&mainRow, with: String(NumberKeyboard.two.rawValue))
-        updateRowText(&secondaryRow, with: mainRow.text)
-        updateRowsArray(main: mainRow, secondRow: secondaryRow)
-        tableView.reloadData()
-        print("mainRow.text is \(mainRow.text)\n secondRow is \(secondaryRow.text)\n rowsArr is \(rowsArray)")
-        printToConsole(this: expression.build().description, of: "twoB: exp")
         
     }
     @IBAction func threeButtonPressed(_ sender: Any) {
@@ -104,14 +98,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func deleteButtonPressed(_ sender: Any) {
-        mainRow.deleleLastTextCharacter()
-        defaultZero(when: mainRow.text)
-        updateRowText(&secondaryRow, with: mainRow.text)
-        updateRowsArray(main: mainRow, secondRow: secondaryRow)
-        tableView.reloadData()
-        print("deletePressed \n")
-        print("mainRow.text is \(mainRow.text)\n secondRow is \(secondaryRow.text)\n rowsArr is \(rowsArray)")
-        printToConsole(this: expression.build().description, of: "delB: exp")
+        
         
     }
     
@@ -122,45 +109,19 @@ class ViewController: UIViewController {
     @IBAction func subtractionButtonPressed(_ sender: Any) {
     }
     @IBAction func additionButtonPressed(_ sender: Any) {
-        if !mainRow.text.contains("+") {
-            let numberToExpression = Int(mainRow.text)
-            expression.addOperand(Double(numberToExpression!))
-            expression.addOperator(.add).build()
-            let tempItem = TableItem(with: mainRow.text, isMain: false)
-            insertRowTo(array: &rowsArray, row: tempItem, at: 2)
-            mainRow.setText("+")
-            updateRowsArray(main: mainRow, secondRow: secondaryRow)
-            tableView.reloadData()
-            printToConsole(this: expression.build().description, of: "adB: exp")
-        } else if mainRow.text.contains("+") && mainRow.text.count != 1 {
-            let tempItem = TableItem(with: mainRow.text, isMain: false)
-            mainRow.text.removeFirst()
-            let numberToExpression = Int(mainRow.text)
-            expression.addOperand(Double(numberToExpression!))
-            expression.addOperator(.add).build()
-            insertRowTo(array: &rowsArray, row: tempItem, at: 2)
-            mainRow.setText("+")
-            updateRowsArray(main: mainRow, secondRow: secondaryRow)
-            tableView.reloadData()
-            printToConsole(this: expression.build().description, of: "adB: exp")
-        }
+        
     }
     @IBAction func equalityButtonPressed(_ sender: Any) {
     }
     @IBAction func decimalButtonPressed(_ sender: Any) {
-        if !mainRow.text.contains(".") {
-            updateRowText(&mainRow, with: decimalSign)
-            updateRowText(&secondaryRow, with: mainRow.text)
-            updateRowsArray(main: mainRow, secondRow: secondaryRow)
-            tableView.reloadData()
-            print("mainRow.text is \(mainRow.text)\n secondRow is \(secondaryRow.text)\n rowsArr is \(rowsArray)")
-        }
         
     }
     @IBAction func divisionBy100ButtonPressed(_ sender: Any) {
     }
     //MARK: - Properties
     let example = ["= 0", "- 0", "-0000000000000000", "-----------------------", "= 4", "x 2", "2", "-----------------------", "= 4","x 2", "2"]
+    
+    var numberButtonsClickCouter = 0
     
     let textTableCellIdentifier = "tableCell"
     
@@ -173,18 +134,19 @@ class ViewController: UIViewController {
     
     //MARK: DecimalSign
     let decimalSign = "."
-
+    
     //MARK: - Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
+        print(Double(".2")!)
+        insertRowTo(array: &rowsArray, row: &mainRow, at: 0)
         
-        insertRowTo(array: &rowsArray, row: mainRow, at: 0)
-        expression.addOperand(mainRow.numberPart)
-        printToConsole(this: expression.build().description, of: "from viewdidload: exp -")
-        printToConsole(this: rowsArray.count, of: "rowsArray is")
+        var textString = "1.0"
+        solveRPN(exp: textString)
+        
     }
     
 }
@@ -196,7 +158,7 @@ extension ViewController {
         print("\(of?.description) is \(this)")
     }
     
-    func insertRowTo(array: inout [TableItem], row: TableItem, at index: Int) {
+    func insertRowTo(array: inout [TableItem], row: inout TableItem, at index: Int) {
         array.insert(row, at: index)
     }
     
@@ -233,11 +195,11 @@ extension ViewController {
     }
     
     func solveRPN(exp: String) -> Double? {
-        var numberStack = Stack<Int>()
+        var numberStack = Stack<Double>()
         
         for item in exp {
             
-            if let num = Int(String(item)) {
+            if let num = Double(String(item)) {
                 numberStack.push(num)
             } else {
                 switch item {
@@ -265,12 +227,12 @@ extension ViewController {
                     let temp = left! / right!
                     numberStack.push(temp)
                 default:
-                    return nil
+                    continue
                 }
             }
         }
         
-        print(numberStack.top)
+        print("stack.top is \(numberStack.top)")
         return Double(numberStack.top!)
         
     }

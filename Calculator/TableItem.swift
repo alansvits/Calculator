@@ -28,8 +28,8 @@ struct TableItem {
             let temp = text
             return Double(temp)!
         } else {
-            print(text)
             let temp = String(text.dropFirst())
+            print("numberPart is \(temp)")
             return Double(temp)!
         }
     }

@@ -56,12 +56,14 @@ class ViewController: UIViewController {
             //add to tokens array mainRow.numberPart
             expression.addOperand(mainRow.numberPart)
             printToConsole(this: expression.build().description, of: "exp is")
-            let tempValue = reversePolishNotation(expression.build())
-            printToConsole(this: tempValue, of: "tempValue is")
-            let tempDouble = solveRPN(exp: tempValue)
-            
+            //RPNotation
+            let RPVNotation = reversePolishNotation(expression.build())
+            printToConsole(this: RPVNotation, of: "RPVNotation is")
+            //Get value of solving RPNotation
+            let solutionOfRPNotation = solveRPN(exp: RPVNotation)
+            printToConsole(this: solutionOfRPNotation, of: "solutionOfRPNotation is: ")
             //update secondaryRow with result of solveRPN
-            updateRowText(&secondaryRow, with: String(tempDouble!))
+            updateRowText(&secondaryRow, with: String(solutionOfRPNotation!))
             
             //update rowsArray
             updateRowsArray(main: mainRow, secondRow: secondaryRow)
@@ -138,7 +140,26 @@ class ViewController: UIViewController {
     @IBAction func subtractionButtonPressed(_ sender: Any) {
     }
     @IBAction func additionButtonPressed(_ sender: Any) {
-        
+        print("PLUS clicked:\n")
+        if numberButtonsClickCouter != 0 {
+            //insert new element to rowsArray with text value of mainRow
+            rowsArray.insert(TableItem(with: mainRow.text), at: 2)
+            
+            //update mainRox.text
+            mainRow.text = "+"
+            
+            //add PLUS token to tokens array
+            expression.addOperator(.add)
+            printToConsole(this: expression.build().description, of: "exp is")
+            //update rowsArray
+            updateRowsArray(main: mainRow, secondRow: secondaryRow)
+            
+            //reset counter of number keys clicks
+            numberButtonsClickCouter = 0
+            printToConsole(this: numberButtonsClickCouter, of: "click counter is ")
+            
+            tableView.reloadData()
+        }
     }
     @IBAction func equalityButtonPressed(_ sender: Any) {
     }

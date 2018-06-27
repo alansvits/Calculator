@@ -45,30 +45,59 @@ class ViewController: UIViewController {
     }
     
     @IBAction func oneButtonPressed(_ sender: Any) {
+        print("ONE pressed\n")
         if numberButtonsClickCouter == 0 {
             if expression.build().isEmpty {
                 mainRow.removeZero()
             }
             //update mainRox.text
             updateRowText(&mainRow, with: "1")
-
+            
             //add to tokens array mainRow.numberPart
-            expression.addOperand(1)
+            expression.addOperand(mainRow.numberPart)
             printToConsole(this: expression.build().description, of: "exp is")
             let tempValue = reversePolishNotation(expression.build())
             printToConsole(this: tempValue, of: "tempValue is")
             let tempDouble = solveRPN(exp: tempValue)
-
+            
             //update secondaryRow with result of solveRPN
             updateRowText(&secondaryRow, with: String(tempDouble!))
+            
             //update rowsArray
-
             updateRowsArray(main: mainRow, secondRow: secondaryRow)
+            
             //update counter of number keys clicks
             numberButtonsClickCouter += 1
-
-            tableView.reloadData()
+            printToConsole(this: numberButtonsClickCouter, of: "click counter is ")
             
+            tableView.reloadData()
+        } else {
+            //update mainRox.text
+            updateRowText(&mainRow, with: "1")
+            
+            //remove last token from tokens array
+            expression.removeLastToken()
+            
+            //add to tokens array mainRow.numberPart
+            expression.addOperand(mainRow.numberPart)
+            
+            //RPNotation
+            let RPVNotation = reversePolishNotation(expression.build())
+            printToConsole(this: RPVNotation, of: "RPNotation is: ")
+            //Get value of solving RPNotation
+            let solutionOfRPNotation = solveRPN(exp: RPVNotation)
+            printToConsole(this: solutionOfRPNotation, of: "solutionOfRPNotation is: ")
+            //update secondaryRow with result of solveRPN
+            updateRowText(&secondaryRow, with: String(solutionOfRPNotation!))
+            
+            //update rowsArray
+            updateRowsArray(main: mainRow, secondRow: secondaryRow)
+            
+            //update counter of number keys clicks
+            numberButtonsClickCouter += 1
+            printToConsole(this: numberButtonsClickCouter, of: "click counter is ")
+            
+            tableView.reloadData()
         }
     }
     @IBAction func twoButtonPressed(_ sender: Any) {
@@ -141,11 +170,11 @@ class ViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
-        print(Double(".2")!)
+        //        print(Double(".2")!)
         insertRowTo(array: &rowsArray, row: &mainRow, at: 0)
         
         var textString = "1.0"
-        solveRPN(exp: textString)
+        //        solveRPN(exp: textString)
         
     }
     
@@ -196,8 +225,8 @@ extension ViewController {
     
     func solveRPN(exp: String) -> Double? {
         var numberStack = Stack<Double>()
-        
-        for item in exp {
+        let subStringArray = exp.split(separator: " ")
+        for item in subStringArray {
             
             if let num = Double(String(item)) {
                 numberStack.push(num)

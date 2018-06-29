@@ -9,48 +9,74 @@
 import Foundation
 
 struct TableItem {
-    var text: String
-    var isMain: Bool    
-    init(with text: String, isMain: Bool = false) {
-        self.text = text
+    
+    var sign: String?
+    
+    var numberText: String = ""
+    
+    var numberDouble: Double? {
+        return Double(numberText)
+    }
+    
+    var numberInt: Int? {
+        if let numberDouble = numberDouble {
+            return Int(numberDouble)
+        } else {
+            return nil
+        }
+    }
+    
+    var isNumDoubleEqualNumInt: Bool {
+        if let numberInt = numberInt {
+            return numberDouble == Double(numberInt)
+        } else {
+            return false
+        }
+    }
+    
+    
+    var text: String {
+        if !isNumDoubleEqualNumInt {
+            if let numberDouble = numberDouble {
+                if let sign = sign {
+                    return sign + " " + String(numberDouble)
+                } else {
+                    return String(numberDouble)
+                }
+            } else {
+                if let sign = sign {
+                    return sign
+                } else {
+                    return ""
+                }
+            }
+        } else {
+            if let numberDouble = numberInt {
+                if let sign = sign {
+                    return sign + " " + String(numberDouble)
+                } else {
+                    return String(numberDouble)
+                }
+            } else {
+                if let sign = sign {
+                    return sign
+                } else {
+                    return ""
+                }
+            }
+        }
+        
+    }
+    
+    var isMain: Bool
+    
+    init(number: Double? = nil, sign: String? = nil, isMain: Bool = false) {
+        if let number = number {
+          self.numberText = String(number)
+        }
+        self.sign = sign
         self.isMain = isMain
     }
     
-    var numberPart: Double {
-        if text.isEmpty {
-            return Double(0)
-        } else if (text.first == "+" || text.first == "-" || text.first == "/" || text.first == "*") && text.count == 1 {
-            return Double(0)
-        } else if !(text.first == "+" || text.first == "-" || text.first == "/" || text.first == "*") && text.count == 1 {
-            let temp = text
-            return Double(temp)!
-        } else if !(text.first == "+" || text.first == "-" || text.first == "/" || text.first == "*") && text.count != 1 {
-            let temp = text
-            return Double(temp)!
-        } else {
-            let temp = String(text.dropFirst())
-            print("numberPart is \(temp)")
-            return Double(temp)!
-        }
-    }
-    mutating func deleleLastTextCharacter() {
-        if !self.text.isEmpty {
-            self.text.removeLast()
-        }
-    }
     
-    mutating func addToText(_ text: String) {
-//        removeZero()
-        self.text = self.text + text
-    }
-    
-    mutating func setText(_ text: String) {
-            self.text = text
-    }
-    
-    mutating func removeZero() {
-        if self.text.count == 1 && self.text == "0" {
-            self.text = ""
-        }
-    }
 }

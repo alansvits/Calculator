@@ -46,61 +46,29 @@ class ViewController: UIViewController {
     
     @IBAction func oneButtonPressed(_ sender: Any) {
         print("ONE pressed\n")
-        if numberButtonsClickCouter == 0 {
-            if expression.build().isEmpty {
-                mainRow.removeZero()
-            }
-            //update mainRox.text
-            updateRowText(&mainRow, with: "1")
-            
-            //add to tokens array mainRow.numberPart
-            expression.addOperand(mainRow.numberPart)
-            printToConsole(this: expression.build().description, of: "exp is")
-            //RPNotation
-            let RPVNotation = reversePolishNotation(expression.build())
-            printToConsole(this: RPVNotation, of: "RPVNotation is")
-            //Get value of solving RPNotation
-            let solutionOfRPNotation = solveRPN(exp: RPVNotation)
-            printToConsole(this: solutionOfRPNotation as Any, of: "solutionOfRPNotation is: ")
-            //update secondaryRow with result of solveRPN
-            updateRowText(&secondaryRow, with: String(solutionOfRPNotation!))
-            
-            //update rowsArray
-            updateRowsArray(main: mainRow, secondRow: secondaryRow)
-            
-            //update counter of number keys clicks
-            numberButtonsClickCouter += 1
-            printToConsole(this: numberButtonsClickCouter, of: "click counter is ")
-            
-            tableView.reloadData()
-        } else {
-            //update mainRox.text
-            updateRowText(&mainRow, with: "1")
-            
-            //remove last token from tokens array
+        mainRow.numberText += "1"
+        printToConsole(this: mainRow.text, of: "text is: ")
+        updateRowsArrayWithMainRow()
+        
+        if globalClickCounter == 0 {
             expression.removeLastToken()
-            
-            //add to tokens array mainRow.numberPart
-            expression.addOperand(mainRow.numberPart)
-            
-            //RPNotation
-            let RPVNotation = reversePolishNotation(expression.build())
-            printToConsole(this: RPVNotation, of: "RPNotation is: ")
-            //Get value of solving RPNotation
-            let solutionOfRPNotation = solveRPN(exp: RPVNotation)
-            printToConsole(this: solutionOfRPNotation as Any, of: "solutionOfRPNotation is: ")
-            //update secondaryRow with result of solveRPN
-            updateRowText(&secondaryRow, with: String(solutionOfRPNotation!))
-            
-            //update rowsArray
-            updateRowsArray(main: mainRow, secondRow: secondaryRow)
-            
-            //update counter of number keys clicks
-            numberButtonsClickCouter += 1
-            printToConsole(this: numberButtonsClickCouter, of: "click counter is ")
-            
-            tableView.reloadData()
+            globalClickCounter += 1
         }
+        let tokArr = currentTokensArray(rowsArray: rowsArray)
+        printToConsole(this: tokArr, of: "tokArray is :")
+        let RPN = reversePolishNotation(tokArr)
+        let resultRPN = solveRPN(exp: RPN)
+        
+        if let res = resultRPN {
+            secondaryRow.numberText = String(res)
+            secondaryRow.sign = "="
+        }
+        
+        updateRowsArray(main: mainRow, secondRow: secondaryRow)
+        
+        globalClickCounter += 1
+
+        tableView.reloadData()
     }
     @IBAction func twoButtonPressed(_ sender: Any) {
         
@@ -129,36 +97,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func deleteButtonPressed(_ sender: Any) {
-        printToConsole(this: numberButtonsClickCouter, of: "\nDELETE button will pressed:\nnumberButtonsClickCouter is:")
         
-        if numberButtonsClickCouter > 0 {
-            mainRow.text.removeLast()
-            
-            expression.removeLastToken()
-            
-            mainRow.setText(mainRow.text)
-            
-            if numberButtonsClickCouter >= 1 {
-                expression.addOperand(mainRow.numberPart)
-            }
-            //RPNotation
-            let RPVNotation = reversePolishNotation(expression.build())
-            printToConsole(this: RPVNotation, of: "RPNotation is: ")
-            //Get value of solving RPNotation
-            let solutionOfRPNotation = solveRPN(exp: RPVNotation)
-            printToConsole(this: solutionOfRPNotation as Any, of: "solutionOfRPNotation is: ")
-            //update secondaryRow with result of solveRPN
-            updateRowText(&secondaryRow, with: String(solutionOfRPNotation!))
-            
-            updateRowsArray(main: mainRow, secondRow: secondaryRow)
-            
-            numberButtonsClickCouter -= 1
-            
-            tableView.reloadData()
-            
-            printToConsole(this: numberButtonsClickCouter, of: "DELETE button did pressed:\nnumberButtonsClickCouter is:")
-            
-        }
     }
     
     @IBAction func divisionButtonPressed(_ sender: Any) {
@@ -168,27 +107,7 @@ class ViewController: UIViewController {
     @IBAction func subtractionButtonPressed(_ sender: Any) {
     }
     @IBAction func additionButtonPressed(_ sender: Any) {
-        print("PLUS clicked:\n")
-        printToConsole(this: numberButtonsClickCouter, of: "click counter is ")
-        if numberButtonsClickCouter != 0 {
-            //insert new element to rowsArray with text value of mainRow
-            rowsArray.insert(TableItem(with: mainRow.text), at: 2)
-            
-            //update mainRox.text
-            mainRow.text = "+"
-            
-            //add PLUS token to tokens array
-            expression.addOperator(.add)
-            printToConsole(this: expression.build().description, of: "exp is")
-            //update rowsArray
-            updateRowsArray(main: mainRow, secondRow: secondaryRow)
-            
-            //reset counter of number keys clicks
-            numberButtonsClickCouter = 0
-            printToConsole(this: numberButtonsClickCouter, of: "click counter is ")
-            
-            tableView.reloadData()
-        }
+        
     }
     @IBAction func equalityButtonPressed(_ sender: Any) {
     }
@@ -201,12 +120,12 @@ class ViewController: UIViewController {
     let example = ["= 0", "- 0", "-0000000000000000", "-----------------------", "= 4", "x 2", "2", "-----------------------", "= 4","x 2", "2"]
     
     var numberButtonsClickCouter = 0
-    
+    var globalClickCounter = 0
     let textTableCellIdentifier = "tableCell"
     
     var rowsArray = [TableItem]()
-    var mainRow = TableItem(with: "0", isMain: true)
-    var secondaryRow = TableItem(with: "= ")
+    var mainRow = TableItem(isMain: true)
+    var secondaryRow = TableItem()
     
     //MARK: Infix expression
     var expression = InfixExpressionBuilder()
@@ -220,14 +139,18 @@ class ViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
-        //        print(Double(".2")!)
-        insertRowTo(array: &rowsArray, row: &mainRow, at: 0)
-        print("viewDidLoad:\n")
-        printToConsole(this: mainRow.numberPart, of: "numberPart is:")
-        printToConsole(this: expression.build(), of: "exp is: ")
-        //        var textString = "1.0"
-        //        solveRPN(exp: textString)
         
+        mainRow.numberText = "0"
+        
+        insertRowTo(array: &rowsArray, row: &mainRow, at: 0)
+        currentTokensArray(rowsArray: rowsArray)
+        print("viewDidLoad:\n")
+        printToConsole(this: expression.build(), of: "exp is: ")
+        
+        printToConsole(this: expression.build().description, of: "tokens array is :")
+        tableView.reloadData()
+        printToConsole(this: mainRow.text, of: "text is: ")
+        printToConsole(this: mainRow.isNumDoubleEqualNumInt, of: "is equal: ")
     }
     
 }
@@ -243,20 +166,21 @@ extension ViewController {
         array.insert(row, at: index)
     }
     
-    func updateRowText(_ row: inout TableItem, with text: String) {
-        if row.text.contains("=") {
-            row.setText("= " + text)
-        } else {
-            row.addToText(text)
-        }
-    }
-    
     func updateRowsArray() {
         if rowsArray.count == 1 {
             rowsArray.insert(secondaryRow, at: 0)
         }
     }
     
+    func updateRowsArrayWithMainRow() {
+        if rowsArray.count == 1 {
+            rowsArray.removeFirst()
+            rowsArray.insert(mainRow, at: 0)
+        } else {
+            rowsArray.remove(at: 1)
+            rowsArray.insert(mainRow, at: 1)
+        }
+    }
     func updateRowsArray(main: TableItem, secondRow: TableItem) {
         if rowsArray.count == 1 {
             rowsArray.insert(secondRow, at: 0)
@@ -265,13 +189,6 @@ extension ViewController {
         } else {
             let arr: [TableItem] = [secondRow, main]
             rowsArray.replaceSubrange(0...1, with: arr)
-        }
-    }
-    
-    func defaultZero(when text: String) {
-        if text == "" {
-            mainRow.text = "0"
-            secondaryRow.text = "= " + mainRow.text
         }
     }
     
@@ -329,6 +246,38 @@ extension ViewController {
         } else {
             return subStr
         }
+    }
+    
+    func currentTokensArray(rowsArray: [TableItem]) -> [Token] {
+
+        if rowsArray.count >= 1 {
+            var tempArray = rowsArray
+            tempArray.reverse()
+            if rowsArray.count != 1 {
+                tempArray.removeLast()
+            }
+            for item in tempArray {
+                if let sign = item.sign {
+                    if sign == "+" {
+                        expression.addOperator(.add)
+                    }
+                    if sign == "-" {
+                        expression.addOperator(.subtract)
+                    }
+                    if sign == "×" {
+                        expression.addOperator(.multiply)
+                    }
+                    if sign == "÷" {
+                        expression.addOperator(.divide)
+                    }
+                }
+                if let numberDouble = item.numberDouble {
+                    expression.addOperand(numberDouble)
+                }
+            }
+        }
+        
+        return expression.build()
     }
     
 }

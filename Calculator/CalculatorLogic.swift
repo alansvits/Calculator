@@ -176,7 +176,7 @@ public class InfixExpressionBuilder {
     public func removeLastToken() {
         expression.removeLast()
     }
-
+    
     public func build() -> [Token] {
         // Maybe do some validation here
         return expression
@@ -319,3 +319,4 @@ let expr = InfixExpressionBuilder()
 //        return 1
 //    }
 //}
+

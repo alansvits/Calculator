@@ -61,7 +61,7 @@ class ViewController: UIViewController {
             printToConsole(this: RPVNotation, of: "RPVNotation is")
             //Get value of solving RPNotation
             let solutionOfRPNotation = solveRPN(exp: RPVNotation)
-            printToConsole(this: solutionOfRPNotation, of: "solutionOfRPNotation is: ")
+            printToConsole(this: solutionOfRPNotation as Any, of: "solutionOfRPNotation is: ")
             //update secondaryRow with result of solveRPN
             updateRowText(&secondaryRow, with: String(solutionOfRPNotation!))
             
@@ -88,7 +88,7 @@ class ViewController: UIViewController {
             printToConsole(this: RPVNotation, of: "RPNotation is: ")
             //Get value of solving RPNotation
             let solutionOfRPNotation = solveRPN(exp: RPVNotation)
-            printToConsole(this: solutionOfRPNotation, of: "solutionOfRPNotation is: ")
+            printToConsole(this: solutionOfRPNotation as Any, of: "solutionOfRPNotation is: ")
             //update secondaryRow with result of solveRPN
             updateRowText(&secondaryRow, with: String(solutionOfRPNotation!))
             
@@ -129,8 +129,36 @@ class ViewController: UIViewController {
     }
     
     @IBAction func deleteButtonPressed(_ sender: Any) {
+        printToConsole(this: numberButtonsClickCouter, of: "\nDELETE button will pressed:\nnumberButtonsClickCouter is:")
         
-        
+        if numberButtonsClickCouter > 0 {
+            mainRow.text.removeLast()
+            
+            expression.removeLastToken()
+            
+            mainRow.setText(mainRow.text)
+            
+            if numberButtonsClickCouter >= 1 {
+                expression.addOperand(mainRow.numberPart)
+            }
+            //RPNotation
+            let RPVNotation = reversePolishNotation(expression.build())
+            printToConsole(this: RPVNotation, of: "RPNotation is: ")
+            //Get value of solving RPNotation
+            let solutionOfRPNotation = solveRPN(exp: RPVNotation)
+            printToConsole(this: solutionOfRPNotation as Any, of: "solutionOfRPNotation is: ")
+            //update secondaryRow with result of solveRPN
+            updateRowText(&secondaryRow, with: String(solutionOfRPNotation!))
+            
+            updateRowsArray(main: mainRow, secondRow: secondaryRow)
+            
+            numberButtonsClickCouter -= 1
+            
+            tableView.reloadData()
+            
+            printToConsole(this: numberButtonsClickCouter, of: "DELETE button did pressed:\nnumberButtonsClickCouter is:")
+            
+        }
     }
     
     @IBAction func divisionButtonPressed(_ sender: Any) {
@@ -141,6 +169,7 @@ class ViewController: UIViewController {
     }
     @IBAction func additionButtonPressed(_ sender: Any) {
         print("PLUS clicked:\n")
+        printToConsole(this: numberButtonsClickCouter, of: "click counter is ")
         if numberButtonsClickCouter != 0 {
             //insert new element to rowsArray with text value of mainRow
             rowsArray.insert(TableItem(with: mainRow.text), at: 2)
@@ -193,8 +222,10 @@ class ViewController: UIViewController {
         tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
         //        print(Double(".2")!)
         insertRowTo(array: &rowsArray, row: &mainRow, at: 0)
-        
-        var textString = "1.0"
+        print("viewDidLoad:\n")
+        printToConsole(this: mainRow.numberPart, of: "numberPart is:")
+        printToConsole(this: expression.build(), of: "exp is: ")
+        //        var textString = "1.0"
         //        solveRPN(exp: textString)
         
     }
@@ -204,8 +235,8 @@ class ViewController: UIViewController {
 //MARK: - Helper functions
 extension ViewController {
     
-    private func printToConsole(this: Any, of: String?) {
-        print("\(of?.description) is \(this)")
+    private func printToConsole(this: Any, of: String) {
+        print("\(String(describing: of.description)) is \(this)")
     }
     
     func insertRowTo(array: inout [TableItem], row: inout TableItem, at index: Int) {
@@ -246,7 +277,8 @@ extension ViewController {
     
     func solveRPN(exp: String) -> Double? {
         var numberStack = Stack<Double>()
-        let subStringArray = exp.split(separator: " ")
+        //        let subStringArray = exp.split(separator: " ")
+        let subStringArray = RPNValidation(rpn: exp)
         for item in subStringArray {
             
             if let num = Double(String(item)) {
@@ -285,6 +317,18 @@ extension ViewController {
         print("stack.top is \(numberStack.top)")
         return Double(numberStack.top!)
         
+    }
+    
+    func RPNValidation(rpn: String) -> [Substring] {
+        var subStr = rpn.split(separator: " ")
+        let numberOfArrayElements = subStr.count
+        let evenOrOdd = numberOfArrayElements % 2
+        if evenOrOdd == 0 {
+            subStr.removeLast()
+            return subStr
+        } else {
+            return subStr
+        }
     }
     
 }

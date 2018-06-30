@@ -36,6 +36,46 @@ struct TableItem {
     
     
     var text: String {
+        
+        if numberText.contains(".") {
+            if numberText == "0." {
+                if let numberDouble = numberDouble {
+                    if let sign = sign {
+                        return sign + " " + numberText
+                    } else {
+                        return numberText
+                    }
+                } else {
+                    if let sign = sign {
+                        return sign
+                    } else {
+                        return ""
+                    }
+                }
+            }
+            
+            if let numberDouble = numberDouble {
+                if let sign = sign {
+                    return sign + " " + numberText
+                } else {
+                    if numberText.hasPrefix("01") {
+                        var temp = numberText
+                        temp.removeFirst()
+                        return temp
+                    }
+                    return String(numberDouble)
+                }
+            } else {
+                if let sign = sign {
+                    return sign
+                } else {
+                    return ""
+                }
+            }
+        }
+        
+
+        
         if !isNumDoubleEqualNumInt {
             if let numberDouble = numberDouble {
                 if let sign = sign {

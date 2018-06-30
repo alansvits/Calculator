@@ -177,6 +177,10 @@ public class InfixExpressionBuilder {
         expression.removeLast()
     }
     
+    public func removeAllTokens() {
+        expression.removeAll()
+    }
+    
     public func build() -> [Token] {
         // Maybe do some validation here
         return expression

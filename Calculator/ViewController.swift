@@ -67,7 +67,7 @@ class ViewController: UIViewController {
         updateRowsArray(main: mainRow, secondRow: secondaryRow)
         
         globalClickCounter += 1
-
+        
         tableView.reloadData()
     }
     @IBAction func twoButtonPressed(_ sender: Any) {
@@ -112,7 +112,33 @@ class ViewController: UIViewController {
     @IBAction func equalityButtonPressed(_ sender: Any) {
     }
     @IBAction func decimalButtonPressed(_ sender: Any) {
-        
+        print("decimalButton pressed\n")
+
+        if !mainRow.numberText.contains(".") {
+            mainRow.numberText += "."
+            printToConsole(this: mainRow.text, of: "text is: ")
+            updateRowsArrayWithMainRow()
+            
+            if globalClickCounter == 0 {
+                expression.removeLastToken()
+                globalClickCounter += 1
+            }
+            let tokArr = currentTokensArray(rowsArray: rowsArray)
+            printToConsole(this: tokArr, of: "tokArray is :")
+            let RPN = reversePolishNotation(tokArr)
+            let resultRPN = solveRPN(exp: RPN)
+            
+            if let res = resultRPN {
+                secondaryRow.numberText = String(res)
+                secondaryRow.sign = "="
+            }
+            
+            updateRowsArray(main: mainRow, secondRow: secondaryRow)
+            
+            globalClickCounter += 1
+            
+            tableView.reloadData()
+        }
     }
     @IBAction func divisionBy100ButtonPressed(_ sender: Any) {
     }
@@ -249,7 +275,8 @@ extension ViewController {
     }
     
     func currentTokensArray(rowsArray: [TableItem]) -> [Token] {
-
+        expression.removeAllTokens()
+        
         if rowsArray.count >= 1 {
             var tempArray = rowsArray
             tempArray.reverse()

@@ -36,7 +36,11 @@ struct TableItem {
     
     
     var text: String {
-        return sign ?? "" + inputNumberString.removeLeadingZero()
+        if let sign = sign {
+            return sign + " " + inputNumberString.removeLeadingZero()
+        } else {
+            return inputNumberString.removeLeadingZero()
+        }
     }
     
     var inputNumberStringCount: Int {

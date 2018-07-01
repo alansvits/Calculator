@@ -46,6 +46,17 @@ class ViewController: UIViewController {
     
     @IBAction func oneButtonPressed(_ sender: Any) {
         print("ONE pressed\n")
+        mainRow.inputNumberString += "1"
+        
+        updateRowsArrayWithMainRow()
+        let RPN = reversePolishNotation(currentTokensArray(rowsArray: rowsArray))
+        let solvedRPN = solveRPN(exp: RPN)
+        secondaryRow.inputNumberString = String(solvedRPN!)
+        secondaryRow.sign = "="
+        updateRowsArray(main: mainRow, secondRow: secondaryRow)
+        printInfo(about: mainRow, "mainRow")
+        printInfo(about: secondaryRow, "secondaryRow")
+        tableView.reloadData()
     }
     @IBAction func twoButtonPressed(_ sender: Any) {
         
@@ -75,7 +86,7 @@ class ViewController: UIViewController {
     
     @IBAction func deleteButtonPressed(_ sender: Any) {
         print("deleteButton pressed\n")
-
+        
     }
     
     @IBAction func divisionButtonPressed(_ sender: Any) {
@@ -91,7 +102,7 @@ class ViewController: UIViewController {
     }
     @IBAction func decimalButtonPressed(_ sender: Any) {
         print("decimalButton pressed\n")
-
+        
     }
     @IBAction func divisionBy100ButtonPressed(_ sender: Any) {
     }
@@ -122,17 +133,18 @@ class ViewController: UIViewController {
         mainRow.inputNumberString = "0"
         printToConsole(this: mainRow.text, of: "text:")
         insertRowTo(array: &rowsArray, row: &mainRow, at: 0)
-//        currentTokensArray(rowsArray: rowsArray)
+        //        currentTokensArray(rowsArray: rowsArray)
         print("viewDidLoad:\n")
         printToConsole(this: expression.build(), of: "exp: ")
         
         printToConsole(this: expression.build().description, of: "tokens array:")
         tableView.reloadData()
-
+        
         printToConsole(this: mainRow.text, of: "text: ")
         printToConsole(this: mainRow.inputNumberStringCount, of: "inputNumberStringCount: ")
         printToConsole(this: mainRow.isNumDoubleEqualNumInt, of: "is equal: ")
-//        printToConsole(this: "01".removeLeadingZero(), of: "extension:")
+        //        printToConsole(this: "01".removeLeadingZero(), of: "extension:")
+        printInfo(about: mainRow, "mainRow")
     }
     
 }
@@ -141,9 +153,25 @@ class ViewController: UIViewController {
 extension ViewController {
     
     private func printToConsole(this: Any, of: String) {
-        print("\(String(describing: of.description)) is \(this)")
+        print("\(String(describing: of.description)) = \(this)")
     }
     
+    private func printInfo(about item: TableItem, _ name: String) {
+        print("\(name)----------------")
+        let mirrored_object = Mirror(reflecting: item)
+        for (index, attr) in mirrored_object.children.enumerated() {
+            if let propertyName = attr.label as String! {
+                print("Attr \(index): \(propertyName) = \(attr.value)")
+            }
+        }
+        printToConsole(this: item.text, of: "text")
+        printToConsole(this: item.inputNumberStringCount, of: "inputNumberStringCount")
+        printToConsole(this: item.numberDouble, of: "numberDouble")
+        printToConsole(this: item.numberInt, of: "numberInt")
+        printToConsole(this: item.isNumDoubleEqualNumInt, of: "isNumDoubleEqualNumInt")
+        print("----------------")
+
+    }
     func insertRowTo(array: inout [TableItem], row: inout TableItem, at index: Int) {
         array.insert(row, at: index)
     }
@@ -213,7 +241,7 @@ extension ViewController {
             }
         }
         
-        print("stack.top is \(numberStack.top)")
+//        print("stack.top is \(numberStack.top)")
         return Double(numberStack.top!)
         
     }

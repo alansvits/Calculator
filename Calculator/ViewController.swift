@@ -41,12 +41,18 @@ class ViewController: UIViewController {
     
     //Number buttons
     @IBAction func zeroButtonPressed(_ sender: Any) {
+        print("ZERO pressed\n")
+        buttonPressedNumber("0")
+        
+        printInfo(about: mainRow, "mainRow")
+        printInfo(about: secondaryRow, "secondaryRow")
+        
+        tableView.reloadData()
         
     }
     
-    @IBAction func oneButtonPressed(_ sender: Any) {
-        print("ONE pressed\n")
-        mainRow.inputNumberString += "1"
+    fileprivate func buttonPressedNumber(_ number: String) {
+        mainRow.inputNumberString += number
         
         updateRowsArrayWithMainRow()
         let RPN = reversePolishNotation(currentTokensArray(rowsArray: rowsArray))
@@ -54,8 +60,15 @@ class ViewController: UIViewController {
         secondaryRow.inputNumberString = String(solvedRPN!)
         secondaryRow.sign = "="
         updateRowsArray(main: mainRow, secondRow: secondaryRow)
+    }
+    
+    @IBAction func oneButtonPressed(_ sender: Any) {
+        print("ONE pressed\n")
+        buttonPressedNumber("1")
+        
         printInfo(about: mainRow, "mainRow")
         printInfo(about: secondaryRow, "secondaryRow")
+        
         tableView.reloadData()
     }
     @IBAction func twoButtonPressed(_ sender: Any) {

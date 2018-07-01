@@ -11,11 +11,15 @@ import Foundation
 extension String {
      func removeLeadingZero() -> String {
         var temp = self
-        if self.hasPrefix("0") && !self.hasPrefix("0.") && self.count > 1 {
-
+        while temp.hasPrefix("00") {
             temp.removeFirst()
+        }
+        if temp.hasPrefix("0") && !temp.hasPrefix("0.") && temp.count > 1 {
+            temp.removeFirst()
+            print(temp)
             return temp
         }
+        
         return temp
     }
 }

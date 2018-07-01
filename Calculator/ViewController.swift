@@ -46,29 +46,6 @@ class ViewController: UIViewController {
     
     @IBAction func oneButtonPressed(_ sender: Any) {
         print("ONE pressed\n")
-        mainRow.numberText += "1"
-        printToConsole(this: mainRow.text, of: "text is: ")
-        updateRowsArrayWithMainRow()
-        
-        if globalClickCounter == 0 {
-            expression.removeLastToken()
-            globalClickCounter += 1
-        }
-        let tokArr = currentTokensArray(rowsArray: rowsArray)
-        printToConsole(this: tokArr, of: "tokArray is :")
-        let RPN = reversePolishNotation(tokArr)
-        let resultRPN = solveRPN(exp: RPN)
-        
-        if let res = resultRPN {
-            secondaryRow.numberText = String(res)
-            secondaryRow.sign = "="
-        }
-        
-        updateRowsArray(main: mainRow, secondRow: secondaryRow)
-        
-        globalClickCounter += 1
-        
-        tableView.reloadData()
     }
     @IBAction func twoButtonPressed(_ sender: Any) {
         
@@ -142,19 +119,20 @@ class ViewController: UIViewController {
         tableView.dataSource = self
         tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
         
-        mainRow.numberText = "0"
-        
+        mainRow.inputNumberString = "0"
+        printToConsole(this: mainRow.text, of: "text:")
         insertRowTo(array: &rowsArray, row: &mainRow, at: 0)
-        currentTokensArray(rowsArray: rowsArray)
+//        currentTokensArray(rowsArray: rowsArray)
         print("viewDidLoad:\n")
-        printToConsole(this: expression.build(), of: "exp is: ")
+        printToConsole(this: expression.build(), of: "exp: ")
         
-        printToConsole(this: expression.build().description, of: "tokens array is :")
+        printToConsole(this: expression.build().description, of: "tokens array:")
         tableView.reloadData()
-        printToConsole(this: mainRow.numberText, of: "numberText is: ")
 
-        printToConsole(this: mainRow.text, of: "text is: ")
+        printToConsole(this: mainRow.text, of: "text: ")
+        printToConsole(this: mainRow.inputNumberStringCount, of: "inputNumberStringCount: ")
         printToConsole(this: mainRow.isNumDoubleEqualNumInt, of: "is equal: ")
+//        printToConsole(this: "01".removeLeadingZero(), of: "extension:")
     }
     
 }

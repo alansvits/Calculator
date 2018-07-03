@@ -16,7 +16,6 @@ extension String {
         }
         if temp.hasPrefix("0") && !temp.hasPrefix("0.") && temp.count > 1 {
             temp.removeFirst()
-            print(temp)
             return temp
         }
         

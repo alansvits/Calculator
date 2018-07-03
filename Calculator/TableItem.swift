@@ -14,10 +14,6 @@ struct TableItem {
     
     var inputNumberString: String = ""
     
-    var checkedInputNumberString : String {
-        return inputNumberString.removeLeadingZero()
-    }
-    
     var numberDouble: Double? {
         return inputNumberStringToDouble()
     }

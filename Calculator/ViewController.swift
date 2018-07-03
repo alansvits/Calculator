@@ -46,7 +46,8 @@ class ViewController: UIViewController {
         
         printInfo(about: mainRow, "mainRow")
         printInfo(about: secondaryRow, "secondaryRow")
-        
+        printToConsole(this: expression.build(), of: "expression")
+        printToConsole(this: expression.build().description, of: "tokens array")
         tableView.reloadData()
         
     }
@@ -57,7 +58,14 @@ class ViewController: UIViewController {
         updateRowsArrayWithMainRow()
         let RPN = reversePolishNotation(currentTokensArray(rowsArray: rowsArray))
         let solvedRPN = solveRPN(exp: RPN)
-        secondaryRow.inputNumberString = String(solvedRPN!)
+        if let answer = solvedRPN {
+            if answer.isEqualToConvertedToInt() {
+                secondaryRow.inputNumberString = String(Int(answer))
+            } else {
+                secondaryRow.inputNumberString = String(answer)
+            }
+        }
+//        secondaryRow.inputNumberString = String(solvedRPN!)
         secondaryRow.sign = "="
         updateRowsArray(main: mainRow, secondRow: secondaryRow)
     }
@@ -68,7 +76,8 @@ class ViewController: UIViewController {
         
         printInfo(about: mainRow, "mainRow")
         printInfo(about: secondaryRow, "secondaryRow")
-        
+        printToConsole(this: expression.build(), of: "expression")
+        printToConsole(this: expression.build().description, of: "tokens array")
         tableView.reloadData()
     }
     @IBAction func twoButtonPressed(_ sender: Any) {
@@ -144,19 +153,14 @@ class ViewController: UIViewController {
         tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
         
         mainRow.inputNumberString = "0"
-        printToConsole(this: mainRow.text, of: "text:")
         insertRowTo(array: &rowsArray, row: &mainRow, at: 0)
         //        currentTokensArray(rowsArray: rowsArray)
         print("viewDidLoad:\n")
-        printToConsole(this: expression.build(), of: "exp: ")
+        printToConsole(this: expression.build(), of: "expression")
         
-        printToConsole(this: expression.build().description, of: "tokens array:")
+        printToConsole(this: expression.build().description, of: "tokens array")
         tableView.reloadData()
-        
-        printToConsole(this: mainRow.text, of: "text: ")
-        printToConsole(this: mainRow.inputNumberStringCount, of: "inputNumberStringCount: ")
-        printToConsole(this: mainRow.isNumDoubleEqualNumInt, of: "is equal: ")
-        //        printToConsole(this: "01".removeLeadingZero(), of: "extension:")
+
         printInfo(about: mainRow, "mainRow")
     }
     

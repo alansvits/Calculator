@@ -49,7 +49,8 @@ struct TableItem {
     
     var isMain: Bool
     
-    init(number: Double? = nil, sign: String? = nil, isMain: Bool = false) {
+    init(input: String = "", sign: String? = nil, isMain: Bool = false) {
+        self.inputNumberString = input
         self.sign = sign
         self.isMain = isMain
     }

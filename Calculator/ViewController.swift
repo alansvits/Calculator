@@ -53,6 +53,7 @@ class ViewController: UIViewController {
     }
     
     fileprivate func buttonPressedNumber(_ number: String) {
+
         mainRow.inputNumberString += number
         
         updateRowsArrayWithMainRow()
@@ -117,7 +118,21 @@ class ViewController: UIViewController {
     @IBAction func subtractionButtonPressed(_ sender: Any) {
     }
     @IBAction func additionButtonPressed(_ sender: Any) {
+        print("Addition button pressed\n")
+        if mainRow.inputNumberStringCount > 0 {
+            buttonPressedNumber("")
+            copyMainRow()
+            mainRow.sign = "+"
+            mainRow.inputNumberString = ""
+            buttonPressedNumber("")
+            
+        }
+        printInfo(about: mainRow, "mainRow")
+        printInfo(about: secondaryRow, "secondaryRow")
+        printToConsole(this: expression.build(), of: "expression")
+        printToConsole(this: expression.build().description, of: "tokens array")
         
+        tableView.reloadData()
     }
     @IBAction func equalityButtonPressed(_ sender: Any) {
     }
@@ -224,6 +239,16 @@ extension ViewController {
         } else {
             let arr: [TableItem] = [secondRow, main]
             rowsArray.replaceSubrange(0...1, with: arr)
+        }
+    }
+    
+    private func copyMainRow() {
+        var temp = mainRow
+        temp.isMain = false
+        if rowsArray.count == 2 {
+            rowsArray.append(temp)
+        } else {
+            rowsArray.insert(temp, at: 2)
         }
     }
     

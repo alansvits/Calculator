@@ -53,7 +53,7 @@ class ViewController: UIViewController {
     }
     
     fileprivate func buttonPressedNumber(_ number: String) {
-
+        
         mainRow.inputNumberString += number
         
         updateRowsArrayWithMainRow()
@@ -109,6 +109,34 @@ class ViewController: UIViewController {
     @IBAction func deleteButtonPressed(_ sender: Any) {
         print("deleteButton pressed\n")
         
+        if mainRow.inputNumberStringCount > 0 && !(mainRow.inputNumberStringCount == 1 && mainRow.inputNumberString == "0") {
+            mainRow.inputNumberString.removeLast()
+            buttonPressedNumber("")
+        } else if mainRow.sign != nil {
+            mainRow.sign = nil
+            buttonPressedNumber("")
+            if rowsArray.count > 2 {
+                mainRow = rowsArray[2]
+                mainRow.isMain = true
+                rowsArray.remove(at: 2)
+                buttonPressedNumber("")
+            }
+        } else {
+            if rowsArray.count > 2 {
+                mainRow = rowsArray[2]
+                mainRow.isMain = true
+                rowsArray.remove(at: 2)
+                buttonPressedNumber("")
+            }
+        }
+        
+        
+        
+        printInfo(about: mainRow, "mainRow")
+        printInfo(about: secondaryRow, "secondaryRow")
+        printToConsole(this: expression.build(), of: "expression")
+        printToConsole(this: expression.build().description, of: "tokens array")
+        tableView.reloadData()
     }
     
     @IBAction func divisionButtonPressed(_ sender: Any) {
@@ -120,7 +148,7 @@ class ViewController: UIViewController {
     @IBAction func additionButtonPressed(_ sender: Any) {
         print("Addition button pressed\n")
         if mainRow.inputNumberStringCount > 0 {
-            buttonPressedNumber("")
+            buttonPressedNumber("") //update rowsArray
             copyMainRow()
             mainRow.sign = "+"
             mainRow.inputNumberString = ""

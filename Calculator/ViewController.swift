@@ -65,7 +65,6 @@ class ViewController: UIViewController {
                 secondaryRow.inputNumberString = String(answer)
             }
         }
-//        secondaryRow.inputNumberString = String(solvedRPN!)
         secondaryRow.sign = "="
         updateRowsArray(main: mainRow, secondRow: secondaryRow)
     }
@@ -124,6 +123,15 @@ class ViewController: UIViewController {
     }
     @IBAction func decimalButtonPressed(_ sender: Any) {
         print("decimalButton pressed\n")
+        if !mainRow.inputNumberString.contains(".") {
+            buttonPressedNumber(decimalSign)
+            
+            printInfo(about: mainRow, "mainRow")
+            printInfo(about: secondaryRow, "secondaryRow")
+            printToConsole(this: expression.build(), of: "expression")
+            printToConsole(this: expression.build().description, of: "tokens array")
+        }
+        tableView.reloadData()
         
     }
     @IBAction func divisionBy100ButtonPressed(_ sender: Any) {
@@ -160,7 +168,7 @@ class ViewController: UIViewController {
         
         printToConsole(this: expression.build().description, of: "tokens array")
         tableView.reloadData()
-
+        
         printInfo(about: mainRow, "mainRow")
     }
     
@@ -187,7 +195,7 @@ extension ViewController {
         printToConsole(this: item.numberInt, of: "numberInt")
         printToConsole(this: item.isNumDoubleEqualNumInt, of: "isNumDoubleEqualNumInt")
         print("----------------")
-
+        
     }
     func insertRowTo(array: inout [TableItem], row: inout TableItem, at index: Int) {
         array.insert(row, at: index)
@@ -258,7 +266,7 @@ extension ViewController {
             }
         }
         
-//        print("stack.top is \(numberStack.top)")
+        //        print("stack.top is \(numberStack.top)")
         return Double(numberStack.top!)
         
     }

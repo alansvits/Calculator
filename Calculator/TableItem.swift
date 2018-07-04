@@ -36,6 +36,9 @@ struct TableItem {
     
     
     var text: String {
+        if isSeparator {
+            return "---------------"
+        }
         if let sign = sign {
             return sign + " " + inputNumberString.removeLeadingZero()
         } else {
@@ -48,8 +51,11 @@ struct TableItem {
     }
     
     var isMain: Bool
+    var isSeparator: Bool = false
     
-    init(input: String = "", sign: String? = nil, isMain: Bool = false) {
+    
+    init(input: String = "", sign: String? = nil, isMain: Bool = false, isSeparator: Bool = false) {
+        self.isSeparator = isSeparator
         self.inputNumberString = input
         self.sign = sign
         self.isMain = isMain

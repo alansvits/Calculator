@@ -72,6 +72,27 @@ class ViewController: UIViewController {
     
     @IBAction func oneButtonPressed(_ sender: Any) {
         print("ONE pressed\n")
+        if separatorFlas {
+            mainRow.isMain = false
+            secondaryRow.isMain = false
+            rowsArray.insert(mainRow, at: 2)
+            rowsArray.insert(secondaryRow, at: 2)
+            mainRow.isSeparator = true
+            rowsArray.insert(mainRow, at: 2)
+            mainRow.isSeparator = false
+            mainRow.isMain = true
+            mainRow.sign = nil
+            mainRow.inputNumberString = ""
+//            buttonPressedNumber("")
+            separatorFlas = false
+            updateRowsArray(main: mainRow, secondRow: secondaryRow)
+            printInfo(about: mainRow, "mainRow")
+            printInfo(about: secondaryRow, "secondaryRow")
+            printToConsole(this: expression.build(), of: "expression")
+            printToConsole(this: expression.build().description, of: "tokens array")
+        }
+        
+//        mainRow.isSeparator = false
         buttonPressedNumber("1")
         
         printInfo(about: mainRow, "mainRow")
@@ -163,6 +184,20 @@ class ViewController: UIViewController {
         tableView.reloadData()
     }
     @IBAction func equalityButtonPressed(_ sender: Any) {
+        print("equalityButton pressed\n")
+        if separatorFlas == false {
+            separatorFlas = true
+            mainRow.isMain = false
+            secondaryRow.isMain = true
+            updateRowsArray(main: mainRow, secondRow: secondaryRow)
+
+        }
+        tableView.reloadData()
+        printInfo(about: mainRow, "mainRow")
+        printInfo(about: secondaryRow, "secondaryRow")
+        printToConsole(this: expression.build(), of: "expression")
+        printToConsole(this: expression.build().description, of: "tokens array")
+        
     }
     @IBAction func decimalButtonPressed(_ sender: Any) {
         print("decimalButton pressed\n")
@@ -182,6 +217,7 @@ class ViewController: UIViewController {
     //MARK: - Properties
     let example = ["= 0", "- 0", "-0000000000000000", "-----------------------", "= 4", "x 2", "2", "-----------------------", "= 4","x 2", "2"]
     
+    var separatorFlas = false
     var numberButtonsClickCouter = 0
     var globalClickCounter = 0
     let textTableCellIdentifier = "tableCell"
@@ -280,6 +316,7 @@ extension ViewController {
         }
     }
     
+    
     func solveRPN(exp: String) -> Double? {
         var numberStack = Stack<Double>()
         //        let subStringArray = exp.split(separator: " ")
@@ -342,10 +379,18 @@ extension ViewController {
         if rowsArray.count >= 1 {
             var tempArray = rowsArray
             tempArray.reverse()
-            if rowsArray.count != 1 {
-                tempArray.removeLast()
+            if tempArray.count != 1 {
+                let last = tempArray.removeLast()
             }
+            
+            
+            
             for item in tempArray {
+                if item.isSeparator == true {
+                    print("break")
+                    expression.removeAllTokens()
+                    continue
+                }
                 if let sign = item.sign {
                     if sign == "+" {
                         expression.addOperator(.add)
@@ -358,6 +403,10 @@ extension ViewController {
                     }
                     if sign == "÷" {
                         expression.addOperator(.divide)
+                    }
+                    if sign == "=" {
+//                        expression.addOperator(.divide)
+                        print("=")
                     }
                 }
                 if let numberDouble = item.numberDouble {

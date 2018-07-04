@@ -168,6 +168,24 @@ class ViewController: UIViewController {
     }
     @IBAction func additionButtonPressed(_ sender: Any) {
         print("Addition button pressed\n")
+        if separatorFlas {
+            mainRow.isMain = false
+            secondaryRow.isMain = false
+            rowsArray.insert(mainRow, at: 2)
+            rowsArray.insert(secondaryRow, at: 2)
+            mainRow.isSeparator = true
+            rowsArray.insert(mainRow, at: 2)
+            mainRow.isSeparator = false
+            mainRow.isMain = true
+            mainRow.sign = nil
+            mainRow.inputNumberString = secondaryRow.inputNumberString
+            separatorFlas = false
+            updateRowsArray(main: mainRow, secondRow: secondaryRow)
+            printInfo(about: mainRow, "mainRow")
+            printInfo(about: secondaryRow, "secondaryRow")
+            printToConsole(this: expression.build(), of: "expression")
+            printToConsole(this: expression.build().description, of: "tokens array")
+        }
         if mainRow.inputNumberStringCount > 0 {
             buttonPressedNumber("") //update rowsArray
             copyMainRow()

@@ -129,7 +129,7 @@ class ViewController: UIViewController {
     
     @IBAction func deleteButtonPressed(_ sender: Any) {
         print("deleteButton pressed\n")
-        
+        //TODO: - fix deletion after equilbutton
         if mainRow.inputNumberStringCount > 0 && !(mainRow.inputNumberStringCount == 1 && mainRow.inputNumberString == "0") {
             mainRow.inputNumberString.removeLast()
             buttonPressedNumber("")
@@ -203,7 +203,7 @@ class ViewController: UIViewController {
     }
     @IBAction func equalityButtonPressed(_ sender: Any) {
         print("equalityButton pressed\n")
-        if separatorFlas == false {
+        if separatorFlas == false && expression.build().count != 0 {
             separatorFlas = true
             mainRow.isMain = false
             secondaryRow.isMain = true

@@ -26,6 +26,15 @@ struct TableItem {
         }
     }
     
+    func dividedBy100() -> Double? {
+        if let tempDouble = numberDouble {
+            return tempDouble / 100
+        } else {
+            return nil
+        }
+    }
+    
+    
     var isNumDoubleEqualNumInt: Bool {
         if let numberInt = numberInt {
             return numberDouble == Double(numberInt)

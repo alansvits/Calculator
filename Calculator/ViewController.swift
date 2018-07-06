@@ -280,6 +280,42 @@ class ViewController: UIViewController {
         
     }
     @IBAction func divisionBy100ButtonPressed(_ sender: Any) {
+        print("divisionBy100Button pressed")
+        
+        if separatorFlas {
+            mainRow.isMain = false
+            secondaryRow.isMain = false
+            rowsArray.insert(mainRow, at: 2)
+            rowsArray.insert(secondaryRow, at: 2)
+            mainRow.isSeparator = true
+            rowsArray.insert(mainRow, at: 2)
+            mainRow.isSeparator = false
+            mainRow.isMain = true
+            mainRow.sign = nil
+            if secondaryRow.numberDouble != 0 {
+                if let tempDouble = secondaryRow.dividedBy100() {
+                    mainRow.inputNumberString = String(tempDouble)
+                    buttonPressedNumber("")
+                }
+            } else {
+                mainRow.inputNumberString = secondaryRow.inputNumberString
+            }
+            separatorFlas = false
+            updateRowsArray(main: mainRow, secondRow: secondaryRow)
+            printInfo(about: mainRow, "mainRow")
+            printInfo(about: secondaryRow, "secondaryRow")
+            printToConsole(this: expression.build(), of: "expression")
+            printToConsole(this: expression.build().description, of: "tokens array")
+        } else {
+            if mainRow.numberDouble != 0 {
+                if let tempDouble = mainRow.dividedBy100() {
+                    mainRow.inputNumberString = String(tempDouble)
+                }
+                buttonPressedNumber("")
+            }
+        }
+        tableView.reloadData()
+        
     }
     //MARK: - Properties
     let example = ["= 0", "- 0", "-0000000000000000", "-----------------------", "= 4", "x 2", "2", "-----------------------", "= 4","x 2", "2"]

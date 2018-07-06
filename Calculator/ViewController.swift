@@ -49,6 +49,7 @@ class ViewController: UIViewController {
         printToConsole(this: expression.build(), of: "expression")
         printToConsole(this: expression.build().description, of: "tokens array")
         tableView.reloadData()
+        AllClearOrClearButtonToShow()
         
     }
     
@@ -83,7 +84,6 @@ class ViewController: UIViewController {
             mainRow.isMain = true
             mainRow.sign = nil
             mainRow.inputNumberString = ""
-            //            buttonPressedNumber("")
             separatorFlas = false
             updateRowsArray(main: mainRow, secondRow: secondaryRow)
             printInfo(about: mainRow, "mainRow")
@@ -92,13 +92,14 @@ class ViewController: UIViewController {
             printToConsole(this: expression.build().description, of: "tokens array")
         }
         
-        //        mainRow.isSeparator = false
         buttonPressedNumber("1")
         
         printInfo(about: mainRow, "mainRow")
         printInfo(about: secondaryRow, "secondaryRow")
         printToConsole(this: expression.build(), of: "expression")
         printToConsole(this: expression.build().description, of: "tokens array")
+        AllClearOrClearButtonToShow()
+        
         tableView.reloadData()
     }
     @IBAction func twoButtonPressed(_ sender: Any) {
@@ -122,9 +123,45 @@ class ViewController: UIViewController {
     
     //MARK: Other buttons
     @IBAction func allClearButton(_ sender: Any) {
+        print("allClearButton pressed\n")
+        expression.removeAllTokens()
+        rowsArray.removeAll()
+        mainRow.inputNumberString = "0"
+        mainRow.sign = nil
+        rowsArray.append(mainRow)
+        
+        printInfo(about: mainRow, "mainRow")
+        printInfo(about: secondaryRow, "secondaryRow")
+        printToConsole(this: expression.build(), of: "expression")
+        printToConsole(this: expression.build().description, of: "tokens array")
+        
+        tableView.reloadData()
     }
     
     @IBAction func clearButtonPressed(_ sender: Any) {
+        print("clearButton pressed\n")
+        if !expression.build().isEmpty {
+            expression.removeAllTokens()
+            for item in rowsArray {
+                if item.isSeparator == true {
+                    break
+                } else {
+                    rowsArray.removeFirst()
+                }
+            }
+            mainRow.inputNumberString = "0"
+            mainRow.sign = nil
+            rowsArray.insert(mainRow, at: 0)
+            clearButton.isHidden = true
+        }
+        printInfo(about: mainRow, "mainRow")
+        printInfo(about: secondaryRow, "secondaryRow")
+        printToConsole(this: expression.build(), of: "expression")
+        printToConsole(this: expression.build().description, of: "tokens array")
+        
+        AllClearOrClearButtonToShow()
+        
+        tableView.reloadData()
     }
     
     @IBAction func deleteButtonPressed(_ sender: Any) {
@@ -162,6 +199,8 @@ class ViewController: UIViewController {
         printInfo(about: secondaryRow, "secondaryRow")
         printToConsole(this: expression.build(), of: "expression")
         printToConsole(this: expression.build().description, of: "tokens array")
+        AllClearOrClearButtonToShow()
+        
         tableView.reloadData()
     }
     
@@ -204,6 +243,8 @@ class ViewController: UIViewController {
         printToConsole(this: expression.build(), of: "expression")
         printToConsole(this: expression.build().description, of: "tokens array")
         
+        AllClearOrClearButtonToShow()
+        
         tableView.reloadData()
     }
     @IBAction func equalityButtonPressed(_ sender: Any) {
@@ -232,6 +273,9 @@ class ViewController: UIViewController {
             printToConsole(this: expression.build(), of: "expression")
             printToConsole(this: expression.build().description, of: "tokens array")
         }
+        
+        AllClearOrClearButtonToShow()
+        
         tableView.reloadData()
         
     }
@@ -262,9 +306,11 @@ class ViewController: UIViewController {
         tableView.dataSource = self
         tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
         
+        
+        
         mainRow.inputNumberString = "0"
         insertRowTo(array: &rowsArray, row: &mainRow, at: 0)
-        //        currentTokensArray(rowsArray: rowsArray)
+        AllClearOrClearButtonToShow()
         print("viewDidLoad:\n")
         printToConsole(this: expression.build(), of: "expression")
         
@@ -299,6 +345,17 @@ extension ViewController {
         print("----------------")
         
     }
+    
+    private func AllClearOrClearButtonToShow() {
+        if expression.build().isEmpty {
+            allClearButton.isHidden = false
+            clearButton.isHidden = true
+        } else {
+            allClearButton.isHidden = true
+            clearButton.isHidden = false
+        }
+    }
+    
     func insertRowTo(array: inout [TableItem], row: inout TableItem, at index: Int) {
         array.insert(row, at: index)
     }
@@ -314,10 +371,15 @@ extension ViewController {
             rowsArray.removeFirst()
             rowsArray.insert(mainRow, at: 0)
         } else {
-            rowsArray.remove(at: 1)
-            rowsArray.insert(mainRow, at: 1)
+            if rowsArray[1].isSeparator == true {
+                rowsArray.insert(mainRow, at: 0)
+            } else {
+                rowsArray.remove(at: 1)
+                rowsArray.insert(mainRow, at: 1)
+            }
         }
     }
+    
     func updateRowsArray(main: TableItem, secondRow: TableItem) {
         if rowsArray.count == 1 {
             rowsArray.insert(secondRow, at: 0)
@@ -325,7 +387,14 @@ extension ViewController {
             rowsArray.append(main)
         } else {
             let arr: [TableItem] = [secondRow, main]
-            rowsArray.replaceSubrange(0...1, with: arr)
+            if rowsArray[1].isSeparator == true {
+                print("true")
+                rowsArray.removeFirst()
+                rowsArray.insert(arr[1], at: 0)
+                rowsArray.insert(arr[0], at: 0)
+            } else {
+                rowsArray.replaceSubrange(0...1, with: arr)
+            }
         }
     }
     

@@ -83,7 +83,7 @@ class ViewController: UIViewController {
             mainRow.isMain = true
             mainRow.sign = nil
             mainRow.inputNumberString = ""
-//            buttonPressedNumber("")
+            //            buttonPressedNumber("")
             separatorFlas = false
             updateRowsArray(main: mainRow, secondRow: secondaryRow)
             printInfo(about: mainRow, "mainRow")
@@ -92,7 +92,7 @@ class ViewController: UIViewController {
             printToConsole(this: expression.build().description, of: "tokens array")
         }
         
-//        mainRow.isSeparator = false
+        //        mainRow.isSeparator = false
         buttonPressedNumber("1")
         
         printInfo(about: mainRow, "mainRow")
@@ -130,27 +130,32 @@ class ViewController: UIViewController {
     @IBAction func deleteButtonPressed(_ sender: Any) {
         print("deleteButton pressed\n")
         //TODO: - fix deletion after equilbutton
-        if mainRow.inputNumberStringCount > 0 && !(mainRow.inputNumberStringCount == 1 && mainRow.inputNumberString == "0") {
-            mainRow.inputNumberString.removeLast()
-            buttonPressedNumber("")
-        } else if mainRow.sign != nil {
-            mainRow.sign = nil
-            buttonPressedNumber("")
-            if rowsArray.count > 2 {
-                mainRow = rowsArray[2]
-                mainRow.isMain = true
-                rowsArray.remove(at: 2)
+        if !separatorFlas {
+            if mainRow.inputNumberStringCount > 0 && !(mainRow.inputNumberStringCount == 1 && mainRow.inputNumberString == "0") {
+                mainRow.inputNumberString.removeLast()
+                if mainRow.inputNumberString == "" && mainRow.sign == nil {
+                    buttonPressedNumber("0")
+                } else {
+                    buttonPressedNumber("")
+                }
+            } else if mainRow.sign != nil {
+                mainRow.sign = nil
                 buttonPressedNumber("")
-            }
-        } else {
-            if rowsArray.count > 2 {
-                mainRow = rowsArray[2]
-                mainRow.isMain = true
-                rowsArray.remove(at: 2)
-                buttonPressedNumber("")
+                if rowsArray.count > 2 {
+                    mainRow = rowsArray[2]
+                    mainRow.isMain = true
+                    rowsArray.remove(at: 2)
+                    buttonPressedNumber("")
+                }
+            } else {
+                if rowsArray.count > 2 && expression.build().count > 1 {
+                    mainRow = rowsArray[2]
+                    mainRow.isMain = true
+                    rowsArray.remove(at: 2)
+                    buttonPressedNumber("")
+                }
             }
         }
-        
         
         
         printInfo(about: mainRow, "mainRow")
@@ -208,7 +213,7 @@ class ViewController: UIViewController {
             mainRow.isMain = false
             secondaryRow.isMain = true
             updateRowsArray(main: mainRow, secondRow: secondaryRow)
-
+            
         }
         tableView.reloadData()
         printInfo(about: mainRow, "mainRow")
@@ -337,7 +342,6 @@ extension ViewController {
     
     func solveRPN(exp: String) -> Double? {
         var numberStack = Stack<Double>()
-        //        let subStringArray = exp.split(separator: " ")
         let subStringArray = RPNValidation(rpn: exp)
         for item in subStringArray {
             
@@ -423,7 +427,7 @@ extension ViewController {
                         expression.addOperator(.divide)
                     }
                     if sign == "=" {
-//                        expression.addOperator(.divide)
+                        //                        expression.addOperator(.divide)
                         print("=")
                     }
                 }

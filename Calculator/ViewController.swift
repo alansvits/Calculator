@@ -68,6 +68,8 @@ class ViewController: UIViewController {
             } else {
                 secondaryRow.inputNumberString = String(answer)
             }
+        } else if solvedRPN == nil && mainRow.inputNumberString == "0" {
+            secondaryRow.inputNumberString = "Can't divide by zero"
         }
         secondaryRow.sign = "="
         updateRowsArray(main: mainRow, secondRow: secondaryRow)
@@ -223,6 +225,7 @@ class ViewController: UIViewController {
         print("allClearButton pressed\n")
         expression.removeAllTokens()
         rowsArray.removeAll()
+        separatorFlag = false
         mainRow.inputNumberString = "0"
         mainRow.isMain = true
         mainRow.sign = nil
@@ -253,6 +256,8 @@ class ViewController: UIViewController {
             rowsArray.insert(mainRow, at: 0)
             clearButton.isHidden = true
         }
+        
+        separatorFlag = false
         printInfo(about: mainRow, "mainRow")
         printInfo(about: secondaryRow, "secondaryRow")
         printToConsole(this: expression.build(), of: "expression")
@@ -448,10 +453,7 @@ class ViewController: UIViewController {
             }
             separatorFlag = false
             updateRowsArray(main: mainRow, secondRow: secondaryRow)
-            printInfo(about: mainRow, "mainRow")
-            printInfo(about: secondaryRow, "secondaryRow")
-            printToConsole(this: expression.build(), of: "expression")
-            printToConsole(this: expression.build().description, of: "tokens array")
+
         } else {
             if mainRow.numberDouble != 0 {
                 if let tempDouble = mainRow.dividedBy100() {
@@ -460,6 +462,12 @@ class ViewController: UIViewController {
                 buttonPressedNumber("")
             }
         }
+        
+        printInfo(about: mainRow, "mainRow")
+        printInfo(about: secondaryRow, "secondaryRow")
+        printToConsole(this: expression.build(), of: "expression")
+        printToConsole(this: expression.build().description, of: "tokens array")
+        
         tableView.reloadData()
         
     }

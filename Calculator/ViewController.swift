@@ -42,6 +42,8 @@ class ViewController: UIViewController {
     //Number buttons
     @IBAction func zeroButtonPressed(_ sender: Any) {
         print("ZERO pressed\n")
+        separatorFladProccesing()
+        
         buttonPressedNumber("0")
         
         printInfo(about: mainRow, "mainRow")
@@ -71,9 +73,8 @@ class ViewController: UIViewController {
         updateRowsArray(main: mainRow, secondRow: secondaryRow)
     }
     
-    @IBAction func oneButtonPressed(_ sender: Any) {
-        print("ONE pressed\n")
-        if separatorFlas {
+    fileprivate func separatorFladProccesing() {
+        if separatorFlag {
             mainRow.isMain = false
             secondaryRow.isMain = false
             rowsArray.insert(mainRow, at: 2)
@@ -84,13 +85,20 @@ class ViewController: UIViewController {
             mainRow.isMain = true
             mainRow.sign = nil
             mainRow.inputNumberString = ""
-            separatorFlas = false
+            separatorFlag = false
             updateRowsArray(main: mainRow, secondRow: secondaryRow)
+            
+            printToConsole(this: separatorFlag, of: "separatorFlag is ")
             printInfo(about: mainRow, "mainRow")
             printInfo(about: secondaryRow, "secondaryRow")
             printToConsole(this: expression.build(), of: "expression")
             printToConsole(this: expression.build().description, of: "tokens array")
         }
+    }
+    
+    @IBAction func oneButtonPressed(_ sender: Any) {
+        print("ONE pressed\n")
+        separatorFladProccesing()
         
         buttonPressedNumber("1")
         
@@ -103,21 +111,110 @@ class ViewController: UIViewController {
         tableView.reloadData()
     }
     @IBAction func twoButtonPressed(_ sender: Any) {
+        print("twoButton pressed\n")
+        separatorFladProccesing()
+        
+        buttonPressedNumber("2")
+        
+        printInfo(about: mainRow, "mainRow")
+        printInfo(about: secondaryRow, "secondaryRow")
+        printToConsole(this: expression.build(), of: "expression")
+        printToConsole(this: expression.build().description, of: "tokens array")
+        tableView.reloadData()
+        AllClearOrClearButtonToShow()
         
     }
     @IBAction func threeButtonPressed(_ sender: Any) {
+        print("threeButton pressed\n")
+        separatorFladProccesing()
+        
+        buttonPressedNumber("3")
+        
+        printInfo(about: mainRow, "mainRow")
+        printInfo(about: secondaryRow, "secondaryRow")
+        printToConsole(this: expression.build(), of: "expression")
+        printToConsole(this: expression.build().description, of: "tokens array")
+        tableView.reloadData()
+        AllClearOrClearButtonToShow()
     }
     @IBAction func fourButtonPressed(_ sender: Any) {
+        print("fourButton pressed\n")
+        separatorFladProccesing()
+        
+        buttonPressedNumber("4")
+        
+        printInfo(about: mainRow, "mainRow")
+        printInfo(about: secondaryRow, "secondaryRow")
+        printToConsole(this: expression.build(), of: "expression")
+        printToConsole(this: expression.build().description, of: "tokens array")
+        tableView.reloadData()
+        AllClearOrClearButtonToShow()
+        
     }
     @IBAction func fiveButtonPressed(_ sender: Any) {
+        print("fiveButton pressed\n")
+        separatorFladProccesing()
+        
+        buttonPressedNumber("5")
+        
+        printInfo(about: mainRow, "mainRow")
+        printInfo(about: secondaryRow, "secondaryRow")
+        printToConsole(this: expression.build(), of: "expression")
+        printToConsole(this: expression.build().description, of: "tokens array")
+        tableView.reloadData()
+        AllClearOrClearButtonToShow()
     }
     @IBAction func sixButtonPressed(_ sender: Any) {
+        print("sixButton pressed\n")
+        separatorFladProccesing()
+        
+        buttonPressedNumber("6")
+        
+        printInfo(about: mainRow, "mainRow")
+        printInfo(about: secondaryRow, "secondaryRow")
+        printToConsole(this: expression.build(), of: "expression")
+        printToConsole(this: expression.build().description, of: "tokens array")
+        tableView.reloadData()
+        AllClearOrClearButtonToShow()
     }
     @IBAction func sevenButtonPressed(_ sender: Any) {
+        print("sevenButton pressed\n")
+        separatorFladProccesing()
+        
+        buttonPressedNumber("7")
+        
+        printInfo(about: mainRow, "mainRow")
+        printInfo(about: secondaryRow, "secondaryRow")
+        printToConsole(this: expression.build(), of: "expression")
+        printToConsole(this: expression.build().description, of: "tokens array")
+        tableView.reloadData()
+        AllClearOrClearButtonToShow()
     }
     @IBAction func eightButtonPressed(_ sender: Any) {
+        print("eightButton pressed\n")
+        separatorFladProccesing()
+        
+        buttonPressedNumber("8")
+        
+        printInfo(about: mainRow, "mainRow")
+        printInfo(about: secondaryRow, "secondaryRow")
+        printToConsole(this: expression.build(), of: "expression")
+        printToConsole(this: expression.build().description, of: "tokens array")
+        tableView.reloadData()
+        AllClearOrClearButtonToShow()
     }
     @IBAction func nineButtonPressed(_ sender: Any) {
+        print("nineButton pressed\n")
+        separatorFladProccesing()
+        
+        buttonPressedNumber("9")
+        
+        printInfo(about: mainRow, "mainRow")
+        printInfo(about: secondaryRow, "secondaryRow")
+        printToConsole(this: expression.build(), of: "expression")
+        printToConsole(this: expression.build().description, of: "tokens array")
+        tableView.reloadData()
+        AllClearOrClearButtonToShow()
         
     }
     
@@ -127,6 +224,7 @@ class ViewController: UIViewController {
         expression.removeAllTokens()
         rowsArray.removeAll()
         mainRow.inputNumberString = "0"
+        mainRow.isMain = true
         mainRow.sign = nil
         rowsArray.append(mainRow)
         
@@ -150,6 +248,7 @@ class ViewController: UIViewController {
                 }
             }
             mainRow.inputNumberString = "0"
+            mainRow.isMain = true
             mainRow.sign = nil
             rowsArray.insert(mainRow, at: 0)
             clearButton.isHidden = true
@@ -167,7 +266,7 @@ class ViewController: UIViewController {
     @IBAction func deleteButtonPressed(_ sender: Any) {
         print("deleteButton pressed\n")
         //TODO: - fix deletion after equilbutton
-        if !separatorFlas {
+        if !separatorFlag {
             if mainRow.inputNumberStringCount > 0 && !(mainRow.inputNumberStringCount == 1 && mainRow.inputNumberString == "0") {
                 mainRow.inputNumberString.removeLast()
                 if mainRow.inputNumberString == "" && mainRow.sign == nil {
@@ -205,14 +304,49 @@ class ViewController: UIViewController {
     }
     
     @IBAction func divisionButtonPressed(_ sender: Any) {
+        print("divisionButton  pressed\n")
+        separatorFlagProccesingForOperators()
+        updateMainRowsWithOperator("÷")
+        
+        printInfo(about: mainRow, "mainRow")
+        printInfo(about: secondaryRow, "secondaryRow")
+        printToConsole(this: expression.build(), of: "expression")
+        printToConsole(this: expression.build().description, of: "tokens array")
+        
+        AllClearOrClearButtonToShow()
+        
+        tableView.reloadData()
     }
     @IBAction func multiplicationButtonPressed(_ sender: Any) {
+        print("multiplication button pressed\n")
+        separatorFlagProccesingForOperators()
+        updateMainRowsWithOperator("×")
+        
+        printInfo(about: mainRow, "mainRow")
+        printInfo(about: secondaryRow, "secondaryRow")
+        printToConsole(this: expression.build(), of: "expression")
+        printToConsole(this: expression.build().description, of: "tokens array")
+        
+        AllClearOrClearButtonToShow()
+        
+        tableView.reloadData()
     }
     @IBAction func subtractionButtonPressed(_ sender: Any) {
+        print("subtraction button pressed\n")
+        separatorFlagProccesingForOperators()
+        updateMainRowsWithOperator("-")
+        
+        printInfo(about: mainRow, "mainRow")
+        printInfo(about: secondaryRow, "secondaryRow")
+        printToConsole(this: expression.build(), of: "expression")
+        printToConsole(this: expression.build().description, of: "tokens array")
+        
+        AllClearOrClearButtonToShow()
+        
+        tableView.reloadData()
     }
-    @IBAction func additionButtonPressed(_ sender: Any) {
-        print("Addition button pressed\n")
-        if separatorFlas {
+    fileprivate func separatorFlagProccesingForOperators() {
+        if separatorFlag {
             mainRow.isMain = false
             secondaryRow.isMain = false
             rowsArray.insert(mainRow, at: 2)
@@ -223,34 +357,46 @@ class ViewController: UIViewController {
             mainRow.isMain = true
             mainRow.sign = nil
             mainRow.inputNumberString = secondaryRow.inputNumberString
-            separatorFlas = false
+            separatorFlag = false
             updateRowsArray(main: mainRow, secondRow: secondaryRow)
             printInfo(about: mainRow, "mainRow")
             printInfo(about: secondaryRow, "secondaryRow")
             printToConsole(this: expression.build(), of: "expression")
             printToConsole(this: expression.build().description, of: "tokens array")
         }
+    }
+    
+    fileprivate func updateMainRowsWithOperator(_ sign: String) {
         if mainRow.inputNumberStringCount > 0 {
             buttonPressedNumber("") //update rowsArray
             copyMainRow()
-            mainRow.sign = "+"
+            mainRow.sign = sign
             mainRow.inputNumberString = ""
             buttonPressedNumber("")
-            
+        } else {
+            mainRow.sign = sign
+            mainRow.inputNumberString = ""
+            updateRowsArrayWithMainRow()
         }
+    }
+    
+    @IBAction func additionButtonPressed(_ sender: Any) {
+        print("Addition button pressed\n")
+        separatorFlagProccesingForOperators()
+        updateMainRowsWithOperator("+")
+        
         printInfo(about: mainRow, "mainRow")
         printInfo(about: secondaryRow, "secondaryRow")
         printToConsole(this: expression.build(), of: "expression")
         printToConsole(this: expression.build().description, of: "tokens array")
-        
-        AllClearOrClearButtonToShow()
-        
+
         tableView.reloadData()
+                AllClearOrClearButtonToShow()
     }
     @IBAction func equalityButtonPressed(_ sender: Any) {
         print("equalityButton pressed\n")
-        if separatorFlas == false && expression.build().count != 0 {
-            separatorFlas = true
+        if separatorFlag == false && expression.build().count != 0 {
+            separatorFlag = true
             mainRow.isMain = false
             secondaryRow.isMain = true
             updateRowsArray(main: mainRow, secondRow: secondaryRow)
@@ -282,7 +428,7 @@ class ViewController: UIViewController {
     @IBAction func divisionBy100ButtonPressed(_ sender: Any) {
         print("divisionBy100Button pressed")
         
-        if separatorFlas {
+        if separatorFlag {
             mainRow.isMain = false
             secondaryRow.isMain = false
             rowsArray.insert(mainRow, at: 2)
@@ -294,13 +440,13 @@ class ViewController: UIViewController {
             mainRow.sign = nil
             if secondaryRow.numberDouble != 0 {
                 if let tempDouble = secondaryRow.dividedBy100() {
-                    mainRow.inputNumberString = String(tempDouble)
+                    mainRow.inputNumberString = tempDouble.description
                     buttonPressedNumber("")
                 }
             } else {
                 mainRow.inputNumberString = secondaryRow.inputNumberString
             }
-            separatorFlas = false
+            separatorFlag = false
             updateRowsArray(main: mainRow, secondRow: secondaryRow)
             printInfo(about: mainRow, "mainRow")
             printInfo(about: secondaryRow, "secondaryRow")
@@ -320,7 +466,7 @@ class ViewController: UIViewController {
     //MARK: - Properties
     let example = ["= 0", "- 0", "-0000000000000000", "-----------------------", "= 4", "x 2", "2", "-----------------------", "= 4","x 2", "2"]
     
-    var separatorFlas = false
+    var separatorFlag = false
     var numberButtonsClickCouter = 0
     var globalClickCounter = 0
     let textTableCellIdentifier = "tableCell"
@@ -424,7 +570,6 @@ extension ViewController {
         } else {
             let arr: [TableItem] = [secondRow, main]
             if rowsArray[1].isSeparator == true {
-                print("true")
                 rowsArray.removeFirst()
                 rowsArray.insert(arr[1], at: 0)
                 rowsArray.insert(arr[0], at: 0)
@@ -483,7 +628,6 @@ extension ViewController {
             }
         }
         
-        //        print("stack.top is \(numberStack.top)")
         return Double(numberStack.top!)
         
     }
@@ -514,7 +658,6 @@ extension ViewController {
             
             for item in tempArray {
                 if item.isSeparator == true {
-                    print("break")
                     expression.removeAllTokens()
                     continue
                 }
@@ -531,10 +674,7 @@ extension ViewController {
                     if sign == "÷" {
                         expression.addOperator(.divide)
                     }
-                    if sign == "=" {
-                        //                        expression.addOperator(.divide)
-                        print("=")
-                    }
+
                 }
                 if let numberDouble = item.numberDouble {
                     expression.addOperand(numberDouble)

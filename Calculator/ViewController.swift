@@ -60,18 +60,32 @@ class ViewController: UIViewController {
         mainRow.inputNumberString += number
         
         updateRowsArrayWithMainRow()
-        let RPN = reversePolishNotation(currentTokensArray(rowsArray: rowsArray))
-        let solvedRPN = solveRPN(exp: RPN)
-        if let answer = solvedRPN {
-            if answer.isEqualToConvertedToInt() {
-                secondaryRow.inputNumberString = String(Int(answer))
+        
+        if let checkedTokensArray = (currentTokensArray(rowsArray: rowsArray)) {
+            let RPN = reversePolishNotation(checkedTokensArray)
+            let solvedRPN = solveRPN(exp: RPN)
+            if let answer = solvedRPN {
+                if answer.isEqualToConvertedToInt() {
+                    secondaryRow.inputNumberString = String(Int(answer))
+                    secondaryRow.sign = "="
+                } else {
+                    secondaryRow.inputNumberString = String(answer)
+                    secondaryRow.sign = "="
+                }
+            } else if solvedRPN == nil && mainRow.inputNumberString == "0" {
+                secondaryRow.inputNumberString = "Can't divide by zero"
+                secondaryRow.sign = nil
+                
             } else {
-                secondaryRow.inputNumberString = String(answer)
+                secondaryRow.inputNumberString = "Error"
+                secondaryRow.sign = nil
+                
             }
-        } else if solvedRPN == nil && mainRow.inputNumberString == "0" {
-            secondaryRow.inputNumberString = "Can't divide by zero"
+        } else {
+            secondaryRow.inputNumberString = "Error"
+            secondaryRow.sign = nil
         }
-        secondaryRow.sign = "="
+        
         updateRowsArray(main: mainRow, secondRow: secondaryRow)
     }
     
@@ -394,19 +408,19 @@ class ViewController: UIViewController {
         printInfo(about: secondaryRow, "secondaryRow")
         printToConsole(this: expression.build(), of: "expression")
         printToConsole(this: expression.build().description, of: "tokens array")
-
+        
         tableView.reloadData()
-                AllClearOrClearButtonToShow()
+        AllClearOrClearButtonToShow()
     }
     @IBAction func equalityButtonPressed(_ sender: Any) {
         print("equalityButton pressed\n")
-        if separatorFlag == false && expression.build().count != 0 {
+        if separatorFlag == false && expression.build().count != 0  {
             separatorFlag = true
             mainRow.isMain = false
             secondaryRow.isMain = true
             updateRowsArray(main: mainRow, secondRow: secondaryRow)
-            
         }
+        //DOTO: - FIX ERROR AFTER CLICK
         tableView.reloadData()
         printInfo(about: mainRow, "mainRow")
         printInfo(about: secondaryRow, "secondaryRow")
@@ -453,7 +467,7 @@ class ViewController: UIViewController {
             }
             separatorFlag = false
             updateRowsArray(main: mainRow, secondRow: secondaryRow)
-
+            
         } else {
             if mainRow.numberDouble != 0 {
                 if let tempDouble = mainRow.dividedBy100() {
@@ -600,59 +614,69 @@ extension ViewController {
     
     func solveRPN(exp: String) -> Double? {
         var numberStack = Stack<Double>()
-        let subStringArray = RPNValidation(rpn: exp)
-        for item in subStringArray {
-            
-            if let num = Double(String(item)) {
-                numberStack.push(num)
-            } else {
-                switch item {
-                case "+":
-                    let right = numberStack.pop()
-                    let left = numberStack.pop()
-                    let temp = left! + right!
-                    numberStack.push(temp)
-                case "-":
-                    let right = numberStack.pop()
-                    let left = numberStack.pop()
-                    let temp = left! - right!
-                    numberStack.push(temp)
-                case "*":
-                    let right = numberStack.pop()
-                    let left = numberStack.pop()
-                    let temp = left! * right!
-                    numberStack.push(temp)
-                case "/":
-                    let right = numberStack.pop()
-                    if right == 0 {
-                        return nil
+        if let subStringArray = RPNValidation(rpn: exp) {
+            for item in subStringArray {
+                if let num = Double(String(item)) {
+                    numberStack.push(num)
+                } else {
+                    switch item {
+                    case "+":
+                        let right = numberStack.pop()
+                        let left = numberStack.pop()
+                        let temp = left! + right!
+                        numberStack.push(temp)
+                    case "-":
+                        let right = numberStack.pop()
+                        let left = numberStack.pop()
+                        let temp = left! - right!
+                        numberStack.push(temp)
+                    case "*":
+                        let right = numberStack.pop()
+                        let left = numberStack.pop()
+                        let temp = left! * right!
+                        numberStack.push(temp)
+                    case "/":
+                        let right = numberStack.pop()
+                        if right == 0 {
+                            return nil
+                        }
+                        let left = numberStack.pop()
+                        let temp = left! / right!
+                        numberStack.push(temp)
+                    default:
+                        continue
                     }
-                    let left = numberStack.pop()
-                    let temp = left! / right!
-                    numberStack.push(temp)
-                default:
-                    continue
                 }
             }
+        } else {
+            return nil
         }
         
         return Double(numberStack.top!)
         
     }
     
-    func RPNValidation(rpn: String) -> [Substring] {
+    func RPNValidation(rpn: String) -> [Substring]? {
+        if rpn.isEmpty {
+            return nil
+        }
         var subStr = rpn.split(separator: " ")
+        let temp = Double(String(subStr[0]))
         let numberOfArrayElements = subStr.count
-        let evenOrOdd = numberOfArrayElements % 2
-        if evenOrOdd == 0 {
-            subStr.removeLast()
-            return subStr
+        if numberOfArrayElements != 0 && temp != nil {
+            let evenOrOdd = numberOfArrayElements % 2
+            if evenOrOdd == 0 {
+                subStr.removeLast()
+                return subStr
+            } else {
+                return subStr
+            }
         } else {
-            return subStr
+            return nil
         }
     }
     
-    func currentTokensArray(rowsArray: [TableItem]) -> [Token] {
+    func currentTokensArray(rowsArray: [TableItem]) -> [Token]? {
         expression.removeAllTokens()
         
         if rowsArray.count >= 1 {
@@ -661,8 +685,6 @@ extension ViewController {
             if tempArray.count != 1 {
                 let last = tempArray.removeLast()
             }
-            
-            
             
             for item in tempArray {
                 if item.isSeparator == true {
@@ -682,10 +704,12 @@ extension ViewController {
                     if sign == "÷" {
                         expression.addOperator(.divide)
                     }
-
+                    
                 }
                 if let numberDouble = item.numberDouble {
                     expression.addOperand(numberDouble)
+                } else if !item.inputNumberString.isEmpty {
+                    return nil
                 }
             }
         }

@@ -541,6 +541,7 @@ extension ViewController {
                 print("Attr \(index): \(propertyName) = \(attr.value)")
             }
         }
+//        printToConsole(this: item.formattedString, of: "formattedString")
         printToConsole(this: item.text, of: "text")
         printToConsole(this: item.inputNumberStringCount, of: "inputNumberStringCount")
         printToConsole(this: item.numberDouble, of: "numberDouble")

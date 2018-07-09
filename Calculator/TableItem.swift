@@ -46,7 +46,7 @@ struct TableItem {
     
     var text: String {
         if isSeparator {
-            return "---------------"
+            return "-----------------------"
         }
         if let sign = sign {
             return sign + " " + inputNumberString.removeLeadingZero()
